@@ -40,6 +40,7 @@ ul li a {
     width: 280px;
     display: block;
     height: 20px;
+    line-height: 20px;
     font-size: 12px;
     text-decoration: none;
     color: black;
@@ -53,4 +54,21 @@ ul li a {
     height: 420px;
     width: 280px;
     background-color: #FFF;
+}
+
+#clipboard-container {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 0px;
+  height: 0px;
+  z-index: 100;
+  display: none;
+  opacity: 0;
+}
+
+#clipboard {
+  width: 1px;
+  height: 1px;
+  padding: 0px;
 }
