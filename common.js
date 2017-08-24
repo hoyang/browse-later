@@ -97,10 +97,15 @@ let saveTab = function (id, url, title, pinned) {
 let updateBrowserAction = function (callback) {
     log("updateBrowserAction");
     getAllSavesTabs().then((tabs) => {
-        log(tabs);
-        browser.browserAction.setBadgeText({text: tabs.length.toString()});
-        browser.browserAction.setTitle({title: "Click to restore " + tabs.length.toString() + " tabs."});
-        browser.browserAction.setBadgeBackgroundColor({color: (tabs.length > 0 ? "green" : "gray")});
+        if(tabs.length > 0) {
+            browser.browserAction.setTitle({title: "Click to restore " + tabs.length.toString() + " tabs."});
+            browser.browserAction.setBadgeText({text: tabs.length.toString()});
+            browser.browserAction.setBadgeBackgroundColor({color: "green")});
+        } else {
+            browser.browserAction.setTitle({title: "Click heart icon inside addressbar to save tab."});
+            browser.browserAction.setBadgeText({text: ""});
+            browser.browserAction.setBadgeBackgroundColor({color: "gray")});
+        }
         if(callback) callback();
     }).catch((reason) => {
         log("updateBrowserAction Error, " + reason);
