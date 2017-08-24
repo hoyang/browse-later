@@ -38,9 +38,15 @@ let saveTab = function (id, url, title, pinned) {
 
 let updateBrowserAction = function () {
     var saved_tabs = getAllSavesTabs();
-    browser.browserAction.setBadgeText({text: saved_tabs.length.toString()});
-    browser.browserAction.setTitle({title: "Click to restore " + saved_tabs.length.toString() + " tabs."});
-    browser.browserAction.setBadgeBackgroundColor({color: (saved_tabs.length > 0 ? "green" : "gray")});
+    if(saved_tabs.length > 0) {
+        browser.browserAction.setTitle({title: "Click to restore " + saved_tabs.length.toString() + " tabs."});
+        browser.browserAction.setBadgeText({text: saved_tabs.length.toString()});
+        browser.browserAction.setBadgeBackgroundColor({color: "green")});
+    } else {
+        browser.browserAction.setTitle({title: "Click heart icon inside addressbar to save tab."});
+        browser.browserAction.setBadgeText({text: ""});
+        browser.browserAction.setBadgeBackgroundColor({color: "gray")});
+    }
 }
 
 let openAllTabs = function() {
