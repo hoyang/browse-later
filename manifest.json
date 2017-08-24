@@ -8,8 +8,16 @@
         "48": "icons/BrowseLater-64.png"
     },
 
+    "applications": {
+        "gecko": {
+            "id": "addon@example.com",
+            "strict_min_version": "45.0"
+        }
+    },
+
     "permissions": [
-        "tabs"
+        "tabs",
+        "storage"
     ],
 
     "page_action": {
@@ -24,5 +32,19 @@
 
     "background": {
         "scripts": ["common.js", "background.js"]
+    },
+
+    "sidebar_action": {
+        "default_title": "Browse Later",
+        "default_panel": "tabs_list.html",
+        "default_icon": "icons/BrowseLater-64.png"
+    },
+
+    "commands": {
+        "_execute_sidebar_action": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+X"
+            }
+        }
     }
 }

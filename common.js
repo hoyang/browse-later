@@ -1,4 +1,47 @@
 let storage_key = "BrowseLaterTabs";
+let storage_opt_key = "BrowseLaterOptions";
+
+let debug_log = true;
+
+var log = function (msg) {
+    if(debug_log) {
+        console.log(msg);
+    }
+}
+
+// choose storage backend
+//TODO:: add sync storage option
+var _storage_backend = browser.storage.local;
+let local_settings = _storage_backend.get(storage_opt_key);
+if(local_settings && local_settings.sync) {
+    _storage_backend = browser.storage.sync;
+    log("browser.storage.sync");
+}
+
+let storage_backend = _storage_backend;
+
+let getScrollbarWidth = function () {
+    var outer = document.createElement("div");
+    outer.style.visibility = "hidden";
+    outer.style.width = "100px";
+    outer.style.msOverflowStyle = "scrollbar"; // needed for WinJS apps
+    document.body.appendChild(outer);
+
+    var widthNoScroll = outer.offsetWidth;
+    // force scrollbars
+    outer.style.overflow = "scroll";
+
+    // add innerdiv
+    var inner = document.createElement("div");
+    inner.style.width = "100%";
+    outer.appendChild(inner);
+
+    var widthWithScroll = inner.offsetWidth;
+
+    // remove divs
+    outer.parentNode.removeChild(outer);
+    return widthNoScroll - widthWithScroll;
+}
 
 let createPageAction = function () {
     browser.tabs.query({active: true, currentWindow: true}).then((tabs) => {
@@ -7,95 +50,135 @@ let createPageAction = function () {
 }
 
 let getAllSavesTabs = function () {
-    let saved_tabs_json = localStorage.getItem(storage_key);
-    var saved_tabs = [];
-    if(saved_tabs_json) {
-        saved_tabs = JSON.parse(saved_tabs_json);
-    }
-    return saved_tabs;
+    return new Promise(function (resolve, reject) {
+        var saved_tabs = storage_backend.get(storage_key);
+        saved_tabs.then((result) => {
+            if(result && storage_key in result) {
+                resolve(result[storage_key]);
+            } else {
+                resolve([]);
+            }
+        }, (error) => {
+            log("getAllSavesTabs Reject, " + reason);
+            reject(error);
+        }).catch((reason) => {
+            log("getAllSavesTabs Error, " + reason);
+        });
+    });
 }
 
 let saveTab = function (id, url, title, pinned) {
-    var saved_tabs = getAllSavesTabs();
-    var saved = false;
-    saved_tabs.forEach(function(tab) {
-        if(url == tab.url) {
-            saved = true;
+    getAllSavesTabs().then((tabs) => {
+        var saved = false;
+        tabs.forEach(function(tab) {
+            if(url == tab.url) {
+                saved = true;
+            }
+        });
+        if(!saved) {
+            let save_tab = {
+                "title": title,
+                "url": url,
+                "pinned": pinned
+            };
+            tabs.push(save_tab);
         }
+        var obj = {};
+        obj[storage_key] = tabs;
+        storage_backend.set(obj).then(() => {
+            updateBrowserAction();
+        });
+        browser.tabs.remove(id);
+    }).catch((reason) => {
+        log("saveTab Error, " + reason);
     });
-    if(!saved) {
-        let save_tab = {
-            "title": title,
-            "url": url,
-            "pinned": pinned
-        };
-        saved_tabs.push(save_tab);
-    }
-    localStorage.setItem(storage_key, JSON.stringify(saved_tabs));
-    browser.tabs.remove(id);
-    updateBrowserAction();
 }
 
-let updateBrowserAction = function () {
-    var saved_tabs = getAllSavesTabs();
-    browser.browserAction.setBadgeText({text: saved_tabs.length.toString()});
-    browser.browserAction.setTitle({title: "Click to restore " + saved_tabs.length.toString() + " tabs."});
-    browser.browserAction.setBadgeBackgroundColor({color: (saved_tabs.length > 0 ? "green" : "gray")});
+let updateBrowserAction = function (callback) {
+    log("updateBrowserAction");
+    getAllSavesTabs().then((tabs) => {
+        log(tabs);
+        browser.browserAction.setBadgeText({text: tabs.length.toString()});
+        browser.browserAction.setTitle({title: "Click to restore " + tabs.length.toString() + " tabs."});
+        browser.browserAction.setBadgeBackgroundColor({color: (tabs.length > 0 ? "green" : "gray")});
+        if(callback) callback();
+    }).catch((reason) => {
+        log("updateBrowserAction Error, " + reason);
+    });
 }
 
 let openAllTabs = function() {
-    let saved_tabs = getAllSavesTabs();
-    saved_tabs.forEach(function(tab) {
-        browser.tabs.create({
-            "url": tab.url,
-            "pinned": tab.pinned
+    getAllSavesTabs().then((tabs) => {
+        tabs.forEach(function(tab) {
+            browser.tabs.create({
+                "url": tab.url,
+                "pinned": tab.pinned
+            });
         });
+        storage_backend.remove(storage_key).then(() => {
+            updateBrowserAction();
+        });
+        window.close();
+    }).catch((reason) => {
+        log("openAllTabs Error, " + reason);
     });
-    localStorage.removeItem(storage_key);
-    updateBrowserAction();
-    window.close();
+
     return false;
 }
 
-let copyAllTabs = function() {
-    let saved_tabs = getAllSavesTabs();
-    var urls = "";
-    saved_tabs.forEach(function(tab) {
-        urls += tab.url + "\n";
+let copyAllTabs = function(event) {
+    event.preventDefault();
+
+    getAllSavesTabs().then((tabs) => {
+        var urls = "";
+        tabs.forEach(function(tab) {
+            urls += tab.url + "\n";
+        });
+
+        if (window.clipboardData && window.clipboardData.setData) {
+            return clipboardData.setData("Text", urls);
+        } else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+            var textarea = document.createElement("textarea");
+            textarea.textContent = urls;
+            textarea.style.position = "fixed";
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                return document.execCommand("copy");
+            } catch (ex) {
+                return false;
+            } finally {
+                document.body.removeChild(textarea);
+            }
+        }
+        window.close();
+    }).catch((reason) => {
+        log("copyAllTabs Error, " + reason);
     });
 
-    if (window.clipboardData && window.clipboardData.setData) {
-        return clipboardData.setData("Text", urls);
-    } else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
-        var textarea = document.createElement("textarea");
-        textarea.textContent = urls;
-        textarea.style.position = "fixed";
-        document.body.appendChild(textarea);
-        textarea.select();
-        try {
-            return document.execCommand("copy");
-        } catch (ex) {
-            return false;
-        } finally {
-            document.body.removeChild(textarea);
-        }
-    }
+    return false;
 }
 
 let openTab = function(event) {
     event.preventDefault();
-    browser.tabs.create({ "url": event.target.href });
 
-    let saved_tabs = getAllSavesTabs();
-    var new_tabs = [];
-    saved_tabs.forEach(function(tab) {
-        if(tab.url != event.target.href) {
-            new_tabs.push(tab);
-        }
+    getAllSavesTabs().then((tabs) => {
+        var new_tabs = [];
+        tabs.forEach(function(tab) {
+            if(tab.url != event.target.href) {
+                new_tabs.push(tab);
+            }
+        });
+
+        var obj = {};
+        obj[storage_key] = new_tabs;
+        storage_backend.set(obj).then(() => {
+            browser.tabs.create({ "url": event.target.href });
+            updateBrowserAction(window.close);
+        });
+    }).catch((reason) => {
+        log("openTab Error, " + reason);
     });
 
-    localStorage.setItem(storage_key, JSON.stringify(new_tabs));
-    updateBrowserAction();
-    window.close();
     return false;
 }
