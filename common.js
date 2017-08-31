@@ -1,7 +1,7 @@
 let storage_key = "BrowseLaterTabs";
 let storage_opt_key = "BrowseLaterOptions";
 
-let debug_log = true;
+let debug_log = false;
 
 var log = function (msg) {
     if(debug_log) {
@@ -53,8 +53,15 @@ let getAllSavesTabs = function () {
     return new Promise(function (resolve, reject) {
         var saved_tabs = storage_backend.get(storage_key);
         saved_tabs.then((result) => {
-            if(result && storage_key in result) {
-                resolve(result[storage_key]);
+            // back compatibility for previous release.
+            let _saved_tabs_json = localStorage.getItem(storage_key);
+            var _saved_tabs = [];
+            if(_saved_tabs_json) {
+                _saved_tabs = JSON.parse(_saved_tabs_json);
+            }
+
+            if(_saved_tabs.length > 0 || (result && storage_key in result)) {
+                resolve(_saved_tabs.concat(result[storage_key]));
             } else {
                 resolve([]);
             }
@@ -100,11 +107,11 @@ let updateBrowserAction = function (callback) {
         if(tabs.length > 0) {
             browser.browserAction.setTitle({title: "Click to restore " + tabs.length.toString() + " tabs."});
             browser.browserAction.setBadgeText({text: tabs.length.toString()});
-            browser.browserAction.setBadgeBackgroundColor({color: "green")});
+            browser.browserAction.setBadgeBackgroundColor({color: "green"});
         } else {
             browser.browserAction.setTitle({title: "Click heart icon inside addressbar to save tab."});
             browser.browserAction.setBadgeText({text: ""});
-            browser.browserAction.setBadgeBackgroundColor({color: "gray")});
+            browser.browserAction.setBadgeBackgroundColor({color: "gray"});
         }
         if(callback) callback();
     }).catch((reason) => {
@@ -121,9 +128,8 @@ let openAllTabs = function() {
             });
         });
         storage_backend.remove(storage_key).then(() => {
-            updateBrowserAction();
+            updateBrowserAction(window.close);
         });
-        window.close();
     }).catch((reason) => {
         log("openAllTabs Error, " + reason);
     });
@@ -141,7 +147,7 @@ let copyAllTabs = function(event) {
         });
 
         if (window.clipboardData && window.clipboardData.setData) {
-            return clipboardData.setData("Text", urls);
+            clipboardData.setData("Text", urls);
         } else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
             var textarea = document.createElement("textarea");
             textarea.textContent = urls;
@@ -149,14 +155,14 @@ let copyAllTabs = function(event) {
             document.body.appendChild(textarea);
             textarea.select();
             try {
-                return document.execCommand("copy");
+                document.execCommand("copy");
             } catch (ex) {
-                return false;
+                log(ex);
             } finally {
                 document.body.removeChild(textarea);
             }
+            window.close();
         }
-        window.close();
     }).catch((reason) => {
         log("copyAllTabs Error, " + reason);
     });
