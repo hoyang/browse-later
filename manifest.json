@@ -8,6 +8,12 @@
         "64": "icons/BrowseLater-64.png"
     },
 
+    "applications": {
+        "gecko": {
+            "id": "{e39749e2-f9b8-4dcb-ac41-c729c0320888}"
+        }
+    },
+
     "permissions": [
         "tabs",
         "storage",
