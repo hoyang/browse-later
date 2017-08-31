@@ -61,7 +61,11 @@ let getAllSavesTabs = function () {
             }
 
             if(_saved_tabs.length > 0 || (result && storage_key in result)) {
-                resolve(_saved_tabs.concat(result[storage_key]));
+                if(result && storage_key in result) {
+                    resolve(_saved_tabs.concat(result[storage_key]));
+                } else {
+                    resolve(_saved_tabs);
+                }
             } else {
                 resolve([]);
             }

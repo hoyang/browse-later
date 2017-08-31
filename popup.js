@@ -24,15 +24,17 @@ var showTabsList = function(event) {
         tab_item.appendChild(tab_item_copy_all_tab);
 
         tabs.forEach(function(tab) {
-            var tab_item = document.createElement("li");
-            var tab_item_url = document.createElement("a");
-            tab_item_url.href = tab.url;
-            tab_item_url.innerText = tab.title;
-            tab_item_url.target = "_blank";
-            tab_item_url.title = tab.title;
-            tab_item.appendChild(tab_item_url);
-            tabs_list.appendChild(tab_item);
-            tab_item_url.addEventListener("click", openTab);
+            if(typeof(tab) != 'undefined') {
+                var tab_item = document.createElement("li");
+                var tab_item_url = document.createElement("a");
+                tab_item_url.href = tab.url;
+                tab_item_url.innerText = tab.title;
+                tab_item_url.target = "_blank";
+                tab_item_url.title = tab.title;
+                tab_item.appendChild(tab_item_url);
+                tabs_list.appendChild(tab_item);
+                tab_item_url.addEventListener("click", openTab);
+            }
         });
 
         var container = document.getElementById("container");
