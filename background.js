@@ -16,12 +16,6 @@ browser.pageAction.onClicked.addListener(function () {
     });
 });
 
-browser.browserAction.setIcon({
-    path: {
-        38: "icons/BrowseLater-64.png"
-    },
-});
-
 browser.browserAction.onClicked.addListener(function () {
     browser.browserAction.setPopup({
         popup: "/tabs_list.html"
