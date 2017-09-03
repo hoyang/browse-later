@@ -49,6 +49,15 @@ let createPageAction = function () {
     });
 }
 
+let clearDuplicateURLs = function (prop, urls) {
+  var mySet = new Set();
+  return urls.filter(function(x) {
+    var key = prop(x), isNew = !mySet.has(key);
+    if (isNew) mySet.add(key);
+    return isNew;
+  });
+}
+
 let getAllSavesTabs = function () {
     return new Promise(function (resolve, reject) {
         var saved_tabs = storage_backend.get(storage_key);
@@ -58,11 +67,27 @@ let getAllSavesTabs = function () {
             var _saved_tabs = [];
             if(_saved_tabs_json) {
                 _saved_tabs = JSON.parse(_saved_tabs_json);
+                // migrate storage
+                log("migrate");
+                log(_saved_tabs.concat(result[storage_key]));
+                var urls = _saved_tabs.concat(result[storage_key]).filter(function(n){
+                    return n != undefined
+                });
+                urls = clearDuplicateURLs(e => e.url, urls);
+                var obj = {};
+                obj[storage_key] = urls;
+                storage_backend.set(obj);
+                log("done");
+                localStorage.removeItem(storage_key);
             }
 
             if(_saved_tabs.length > 0 || (result && storage_key in result)) {
                 if(result && storage_key in result) {
-                    resolve(_saved_tabs.concat(result[storage_key]));
+                    var urls = _saved_tabs.concat(result[storage_key]).filter(function(n){
+                        return n != undefined
+                    });
+                    urls = clearDuplicateURLs(e => e.url, urls);
+                    resolve(urls);
                 } else {
                     resolve(_saved_tabs);
                 }
