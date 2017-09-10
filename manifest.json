@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Browse Later",
-    "version": "2.6.2",
+    "version": "3.0.1",
     "description": "Browse tabs later. Usage: 1. Click the heart icon in the right of address bar to save current tab. 2. Repeat first step to some tabs you want browse it later. 3. Click the heart icon on toolbar restore your saved tabs. That's easy as 1-2-3.",
     "homepage_url": "https://github.com/hoyang/browse-later",
     "icons": {
