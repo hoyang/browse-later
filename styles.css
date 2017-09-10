@@ -92,6 +92,7 @@ ul li a img {
     min-width: 360px;
     padding: 0px;
     margin: 0px;
+    overflow-y: hidden;
 }
 
 #clipboard-container {
@@ -161,13 +162,13 @@ ul li a img {
 #tab_list_open_icon {
     height: 20px;
     width: 20px;
-    margin: 4px 0px 0px 0px;
+    margin: 6px 0px 0px 0px;
     float: left;
     cursor: pointer;
 }
 #tab_list_open_text {
-    height: 24px;
-    line-height: 24px;
+    height: 32px;
+    line-height: 28px;
     font-size: 12px;
     width: 120px;
     color: #66bb6a;
@@ -194,4 +195,3 @@ ul li a img {
     cursor: pointer;
     <!-- #00796b -->
 }
-
