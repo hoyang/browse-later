@@ -65,6 +65,7 @@ var showTabsList = function(event) {
 
             document.getElementById("tab_list_open").addEventListener("click", openAllTabs);
             document.getElementById("tab_list_copy").addEventListener("click", copyAllTabs);
+            document.getElementById("tab_list_clear").addEventListener("click", cleanupAllTabs);
         }
     }).catch((error) => {
         console.log(error);
