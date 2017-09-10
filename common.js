@@ -43,6 +43,25 @@ let getScrollbarWidth = function () {
     return widthNoScroll - widthWithScroll;
 }
 
+let copyToClipboard = function (text) {
+    if (window.clipboardData && window.clipboardData.setData) {
+        clipboardData.setData("Text", text);
+    } else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+        var textarea = document.createElement("textarea");
+        textarea.textContent = text;
+        textarea.style.position = "fixed";
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand("copy");
+        } catch (ex) {
+            log(ex);
+        } finally {
+            document.body.removeChild(textarea);
+        }
+    }
+}
+
 let createPageAction = function () {
     browser.tabs.query({active: true, currentWindow: true}).then((tabs) => {
       browser.pageAction.show(tabs[0].id);
@@ -103,7 +122,7 @@ let getAllSavesTabs = function () {
     });
 }
 
-let saveTab = function (id, url, title, pinned) {
+let saveTab = function (id, url, title, pinned, favicon) {
     getAllSavesTabs().then((tabs) => {
         var saved = false;
         tabs.forEach(function(tab) {
@@ -115,7 +134,8 @@ let saveTab = function (id, url, title, pinned) {
             let save_tab = {
                 "title": title,
                 "url": url,
-                "pinned": pinned
+                "pinned": pinned,
+                "favicon": favicon
             };
             tabs.push(save_tab);
         }
@@ -174,24 +194,8 @@ let copyAllTabs = function(event) {
         tabs.forEach(function(tab) {
             urls += tab.url + "\n";
         });
-
-        if (window.clipboardData && window.clipboardData.setData) {
-            clipboardData.setData("Text", urls);
-        } else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
-            var textarea = document.createElement("textarea");
-            textarea.textContent = urls;
-            textarea.style.position = "fixed";
-            document.body.appendChild(textarea);
-            textarea.select();
-            try {
-                document.execCommand("copy");
-            } catch (ex) {
-                log(ex);
-            } finally {
-                document.body.removeChild(textarea);
-            }
-            window.close();
-        }
+        copyToClipboard(urls);
+        window.close();
     }).catch((reason) => {
         log("copyAllTabs Error, " + reason);
     });
@@ -219,6 +223,44 @@ let openTab = function(event) {
     }).catch((reason) => {
         log("openTab Error, " + reason);
     });
+
+    return false;
+}
+
+let cleanupAllTabs = function () {
+    storage_backend.remove(storage_key).then(() => {
+        updateBrowserAction(window.close);
+    });
+}
+
+let removeTab = function (event) {
+    event.preventDefault();
+    var target_url = event.target.dataset.url;
+    getAllSavesTabs().then((tabs) => {
+        var new_tabs = [];
+        tabs.forEach(function(tab) {
+            if(tab.url != target_url) {
+                new_tabs.push(tab);
+            }
+        });
+
+        var obj = {};
+        obj[storage_key] = new_tabs;
+        storage_backend.set(obj).then(() => {
+            updateBrowserAction(window.close);
+        });
+    }).catch((reason) => {
+        log("removeTab Error, " + reason);
+    });
+
+    return false;
+}
+
+let copyTab = function (event) {
+    event.preventDefault();
+    var target_url = event.target.dataset.url;
+    copyToClipboard(target_url);
+    window.close();
 
     return false;
 }

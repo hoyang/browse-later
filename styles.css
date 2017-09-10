@@ -1,6 +1,10 @@
 body {
     margin: 0px;
-    padding: 2px;
+    padding: 0px;
+    padding-top: 34px;
+    background-color: white;
+    <!-- background-image: url(icons/bg.png); -->
+    <!-- background-repeat: no-repeat; -->
 }
 
 ul {
@@ -19,7 +23,7 @@ ul li {
     margin-bottom: 2px;
     list-style: none;
     overflow-x: hidden;
-    border-bottom-style: solid;
+    border-bottom-style: dotted;
     border-bottom-width: 1px;
     border-bottom-color: #F1F1F1;
 }
@@ -27,32 +31,67 @@ ul li {
 ul li:last-child {
     border-bottom-style: none;
     border-bottom-width: 0px;
+    margin-bottom: 0px;
+    margin-top: 0px;
 }
 
-ul li a {
+ul li a img {
+    width: 16px;
+    height: 16px;
     margin: 0px;
+    margin-left: 5px;
+}
+
+.tab_list_item_li {
+    height: 22px;
     padding: 0px;
-    padding-left: 2px;
-    padding-right: 2px;
-    width: 100%;
-    display: block;
+}
+
+.tab_list_item_a {
     height: 20px;
+    width: 264px;
+    padding: 0px;
+    margin: 0px;
+    margin-left: 6px;
+    margin-right: 10px;
     line-height: 20px;
     font-size: 12px;
+    color: gray;
+    display: block;
     text-decoration: none;
-    color: black;
-    cursor: pointer;
+    float: left;
+    overflow: hidden;
     white-space: nowrap;
-    text-overflow: ellipsis;
+    text-overflow: " ...";
     font-family: sans-serif;
+}
+
+.tab_list_item_a:hover {
+    color: black;
+}
+
+.tab_list_item_img {
+    height: 16px;
+    width: 16px;
+    padding: 0px;
+    margin: 0px;
+    margin-top: 1px;
+    margin-left: 12px;
+    display: inline;
+    float: left;
+}
+
+.tab_list_item_img_nobg {
+    margin-left: 5px;
 }
 
 #container {
     height: 100%;
-    width: 100%;
+    width: 360px;
     max-width: 360px;
-    min-width: 260px;
-    background-color: #FFF;
+    min-width: 360px;
+    padding: 0px;
+    margin: 0px;
 }
 
 #clipboard-container {
@@ -71,3 +110,88 @@ ul li a {
   height: 1px;
   padding: 0px;
 }
+
+#tab_list {
+    width: 360px;
+}
+
+#empty_list_container {
+    width: 360px;
+    height: 98px;
+    padding: 0px;
+    margin: 0px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.empty_list_icon {
+    height: 32px;
+    width: 32px;
+    float: right;
+}
+
+.empty_list_text {
+    height: 32px;
+    width: 256px;
+    line-height: 32px;
+    margin-left: 5px;
+    color: gray;
+    text-transform: uppercase;
+    transform: scale(1, 2);
+    float: left;
+}
+
+#tab_list_header_container {
+    width: 360px;
+    height: 32px;
+    position:fixed;
+    padding: 0px;
+    margin: 0px;
+    top:0;
+    border-bottom: 2px dotted #F1F1F1;
+}
+
+#tab_list_open {
+    width: 176px;
+    padding: 0px;
+    padding-left: 10px;
+    background-color: green;
+    cursor: pointer;
+}
+#tab_list_open_icon {
+    height: 20px;
+    width: 20px;
+    margin: 4px 0px 0px 0px;
+    float: left;
+    cursor: pointer;
+}
+#tab_list_open_text {
+    height: 24px;
+    line-height: 24px;
+    font-size: 12px;
+    width: 120px;
+    color: #66bb6a;
+    display: block;
+    font-weight: bold;
+    margin-left: 5px;
+    margin-top: 2px;
+    float: left;
+}
+
+#tab_list_operation {
+    width: 198px;
+    padding: 0px;
+    margin-right: 0px;
+    margin-top: 2px;
+    padding-left: 0px;
+    float: left;
+}
+#tab_list_operation img {
+    width: 20px;
+    height: 20px;
+    margin: 4px 1px 0px 1px;
+    float: right;
+    cursor: pointer;
+    <!-- #00796b -->
+}
+

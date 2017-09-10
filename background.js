@@ -12,7 +12,7 @@ browser.tabs.onActivated.addListener((activeInfo) => {
 browser.pageAction.onClicked.addListener(function () {
     browser.tabs.query({active: true, currentWindow: true}).then((tabs) => {
         let tab = tabs[0];
-        saveTab(tab.id, tab.url, tab.title, tab.pinned);
+        saveTab(tab.id, tab.url, tab.title, tab.pinned, tab.favIconUrl);
     });
 });
 
