@@ -1,26 +1,22 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8">
     <title>Saved tabs</title>
     <link rel="stylesheet" href="styles.css">
-  </head>
-  <body>
+</head>
+
+<body>
     <div id="container">
         <div id="empty_list_container">
-            <span class="empty_list_text">Browse-later,</span>
+            <p class="empty_list_text">Browse-later,<br>it really whips the llama's ass!</p>
             <img class="empty_list_icon" src="icons/icon.png">
-            <span class="empty_list_text">it really whips the llama's ass!</span>
         </div>
         <div id="tab_list_header_container">
-            <div id="tab_list_open">
-                <img id="tab_list_open_icon" src="icons/open_all.png">
-                <span id="tab_list_open_text" class="">OPEN ALL</span>
-            </div>
-            <div id="tab_list_operation">
-                <img id="tab_list_clear" src="icons/trash.png" title="Clear all tabs" alt="Clear all tabs">
-                <img id="tab_list_copy" src="icons/copy.png" title="Copy all tab's URL" alt="Copy all tab's URL">
-            </div>
+            <button id="tab_list_open" class="tab_list_btn">OPEN ALL</button>
+            <button id="tab_list_copy" class="tab_list_btn">COPY ALL</button>
+            <button id="tab_list_clear" class="tab_list_btn">CLEAR ALL</button>
         </div>
         <ul id="tab_list">
         </ul>
@@ -28,5 +24,6 @@
     <div id="clipboard-container"><textarea id="clipboard"></textarea></div>
     <script src="common.js"></script>
     <script src="popup.js"></script>
-  </body>
+</body>
+
 </html>
