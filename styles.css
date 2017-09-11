@@ -192,4 +192,5 @@ ul li a img {
     background-image: url(icons/copy_url.png);
     color: #ccc;
     display: none;
+    background-size: 16px;
 }
