@@ -43,7 +43,6 @@ var showTabsList = function(event) {
                     tab_item_copy.setAttribute("class", "tab_list_item_nobg copy_item");
                     tab_item_copy.setAttribute("title", "Copy URL");
                     tab_item_copy.setAttribute("data-url", tab.url);
-                    tab_item_copy.style.backgroundImage = "url(icons/copy_url.png)";
 
                     var tab_item_delete = document.createElement("button");
                     tab_item_delete.setAttribute("class", "tab_list_item_nobg delete_item");

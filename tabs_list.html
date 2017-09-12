@@ -5,27 +5,35 @@
     <meta charset="utf-8">
     <title>Saved tabs</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="Vue/vue.min.js"></script>
 </head>
 
 <body>
     <div id="container">
-        <div id="empty_list_container">
+        <div id="empty_list_container" v-if="tabs.length === 0">
             <p class="empty_list_text">Browse-later,<br>it really whips the llama's ass!</p>
             <img class="empty_list_icon" src="icons/icon.png">
         </div>
-        <div id="tab_list_header_container">
-            <button id="tab_list_open" class="tab_list_btn">OPEN ALL</button>
+        <div id="tab_list_header_container" v-if="tabs.length !== 0">
+            <button @click="openAllTabs" id="tab_list_open" class="tab_list_btn">OPEN ALL</button>
             <div class="action_bar">
-                <button id="tab_list_copy" title="Copy the URL list of all your tabs" class="tab_list_btn"></button>
-                <button id="tab_list_clear" class="tab_list_btn">CLEAR ALL</button>
+                <button @click="copyAllTabs" id="tab_list_copy" class="tab_list_btn" title="Copy the URL list of all your tabs"></button>
+                <button @click="cleanupAllTabs" id="tab_list_clear" class="tab_list_btn">CLEAR ALL</button>
             </div>
         </div>
-        <ul id="tab_list">
+        <ul id="tab_list" v-if="tabs.length !== 0">
+            <li class="tab_list_item_li" v-for="tab in tabs">
+                <a @click="openTab" class="tab_list_item_a" :href="tab.url" :title="tab.title" :style="getFavicon(tab.favicon)" target="_blank">{{ tab.title }}</a>
+                <div class="tab_item_menu">
+                    <button @click="copyTab" class="tab_list_item_nobg copy_item" title="Copy URL" :data-url="tab.url"></button>
+                    <button @click="removeTab" class="tab_list_item_nobg delete_item" title="Remove" :data-url="tab.url"></button>
+                </div>
+            </li>
         </ul>
     </div>
     <div id="clipboard-container"><textarea id="clipboard"></textarea></div>
     <script src="common.js"></script>
-    <script src="popup.js"></script>
+    <script src="script.js"></script>
 </body>
 
 </html>
