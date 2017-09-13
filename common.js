@@ -1,5 +1,7 @@
 let storage_key = "BrowseLaterTabs";
 let storage_opt_key = "BrowseLaterOptions";
+let browse_later_tab_menu_id = "browse_later_tab_menu_id";
+let browse_later_all_tab_menu_id = "browse_later_all_tab_menu_id";
 
 let debug_log = false;
 
@@ -64,7 +66,9 @@ let copyToClipboard = function (text) {
 
 let createPageAction = function () {
     browser.tabs.query({active: true, currentWindow: true}).then((tabs) => {
-      browser.pageAction.show(tabs[0].id);
+        let tab = tabs[0];
+
+        browser.pageAction.show(tab.id);
     });
 }
 
@@ -119,6 +123,40 @@ let getAllSavesTabs = function () {
         }).catch((reason) => {
             log("getAllSavesTabs Error, " + reason);
         });
+    });
+}
+
+let saveTabs = function (window_tabs) {
+    getAllSavesTabs().then((tabs) => {
+        window_tabs.forEach(function(tab) {
+            let save_tab = {
+                "title": tab.title,
+                "url": tab.url,
+                "pinned": tab.pinned,
+                "favicon": tab.favIconUrl
+            };
+            tabs.push(save_tab);
+        });
+
+        var obj = {};
+        obj[storage_key] = clearDuplicateURLs(e => e.url, tabs);
+        storage_backend.set(obj).then(() => {
+            updateBrowserAction();
+        });
+
+        browser.tabs.query({currentWindow: true}).then((tabs) => {
+            browser.tabs.create({
+                "url": "about:home",
+                "pinned": false
+            });
+
+            tabs.forEach(function(tab) {
+                browser.tabs.remove(tab.id);
+            });
+        });
+
+    }).catch((reason) => {
+        log("saveTab Error, " + reason);
     });
 }
 
@@ -235,6 +273,7 @@ let cleanupAllTabs = function () {
 
 let removeTab = function (event) {
     event.preventDefault();
+    event.target.parentNode.parentNode.remove();
     var target_url = event.target.dataset.url;
     getAllSavesTabs().then((tabs) => {
         var new_tabs = [];
@@ -247,7 +286,7 @@ let removeTab = function (event) {
         var obj = {};
         obj[storage_key] = new_tabs;
         storage_backend.set(obj).then(() => {
-            updateBrowserAction(window.close);
+            updateBrowserAction();
         });
     }).catch((reason) => {
         log("removeTab Error, " + reason);
