@@ -17,7 +17,7 @@ var showTabsList = function(event) {
             tab_list_header_container.style.display = 'flex';
             tabs_list.style.display = 'block';
 
-            tabs.forEach(function(tab) {
+            tabs.reverse().forEach(function(tab) {
                 if(typeof(tab) != 'undefined') {
                     var tab_item = document.createElement("li");
                     tab_item.setAttribute("class", "tab_list_item_li");
@@ -33,7 +33,6 @@ var showTabsList = function(event) {
                     tab_item_url.style.backgroundImage = "url(icons/icon.png)";
                     if(tab.favicon != undefined) {
                         tab_item_url.style.backgroundImage = "url("+ tab.favicon +")";
-                        //console.log(tab.favicon);
                     }
 
                     var tab_item_menu = document.createElement("div");
@@ -49,7 +48,7 @@ var showTabsList = function(event) {
                     tab_item_delete.setAttribute("class", "tab_list_item_nobg delete_item");
                     tab_item_delete.setAttribute("title", "Remove");
                     tab_item_delete.setAttribute("data-url", tab.url);
-                    
+
                     tab_item_menu.appendChild(tab_item_copy);
                     tab_item_menu.appendChild(tab_item_delete);
 
