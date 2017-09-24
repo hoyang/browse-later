@@ -39,7 +39,7 @@ browser.menus.onClicked.addListener((info, tab) => {
     if(info.menuItemId == browse_later_tab_menu_id) {
         saveTab(tab.id, tab.url, tab.title, tab.pinned, tab.favIconUrl);
     } else if (info.menuItemId == browse_later_all_tab_menu_id) {
-        browser.tabs.query({currentWindow: true}).then((tabs) => {
+        browser.tabs.query({currentWindow: true, pinned: false}).then((tabs) => {
             saveTabs(tabs);
         });
     }
