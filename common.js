@@ -144,7 +144,7 @@ let saveTabs = function (window_tabs) {
             updateBrowserAction();
         });
 
-        browser.tabs.query({currentWindow: true}).then((tabs) => {
+        browser.tabs.query({currentWindow: true, pinned: false}).then((tabs) => {
             browser.tabs.create({
                 "url": "about:home",
                 "pinned": false
