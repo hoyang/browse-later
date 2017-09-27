@@ -144,6 +144,7 @@ ul li {
     height: 32px;
     position: fixed;
     display: flex;
+    background-color: white;
     justify-content: space-between;
     margin: 0px;
     top: 0;
@@ -175,7 +176,7 @@ ul li {
 
 .action_bar {
     display: flex;
-    justify-content: flex-end;    
+    justify-content: flex-end;
 }
 
 #tab_list_open {
