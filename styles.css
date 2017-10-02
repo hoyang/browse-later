@@ -3,6 +3,7 @@ body {
     padding: 0px;
     padding-top: 34px;
     background-color: white;
+    overflow-x: hidden;
 }
 
 ul {
@@ -46,7 +47,7 @@ ul li {
     background-size: 16px;
     background-repeat: no-repeat;
     padding: 10px 0 10px 22px;
-    width: 220px;
+    width: 240px;
     line-height: 20px;
     font-size: 12px;
     color: #444;
