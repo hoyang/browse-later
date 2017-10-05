@@ -7,10 +7,17 @@ var showTabsList = function(event) {
         var tab_list_header_container = document.getElementById("tab_list_header_container");
         var empty_list = document.getElementById("empty_list_container");
 
+        document.getElementById("tab_list_open").innerText = browser.i18n.getMessage("tabListOpen");
+        document.getElementById("tab_list_clear").innerText = browser.i18n.getMessage("tabListClear");
+        document.getElementById("tab_list_copy").title = browser.i18n.getMessage("tabListCopy");
+        let tab_item_copy_title = browser.i18n.getMessage("tabItemCopyTitle");
+        let tab_item_remove_title = browser.i18n.getMessage("tabItemRemoveTitle");
+
         if(tabs.length == 0) {
             empty_list.style.display = 'flex';
             tabs_list.style.display = 'none';
             tab_list_header_container.style.display = 'none';
+            document.getElementsByClassName("empty_list_text")[0].innerHTML = browser.i18n.getMessage("slogan");
         } else {
 
             empty_list.style.display = 'none';
@@ -40,13 +47,13 @@ var showTabsList = function(event) {
 
                     var tab_item_copy = document.createElement("button");
                     tab_item_copy.setAttribute("class", "tab_list_item_nobg copy_item");
-                    tab_item_copy.setAttribute("title", "Copy URL");
+                    tab_item_copy.setAttribute("title", tab_item_copy_title);
                     tab_item_copy.setAttribute("data-url", tab.url);
                     tab_item_copy.style.backgroundImage = "url(icons/copy_url.png)";
 
                     var tab_item_delete = document.createElement("button");
                     tab_item_delete.setAttribute("class", "tab_list_item_nobg delete_item");
-                    tab_item_delete.setAttribute("title", "Remove");
+                    tab_item_delete.setAttribute("title", tab_item_remove_title);
                     tab_item_delete.setAttribute("data-url", tab.url);
 
                     tab_item_menu.appendChild(tab_item_copy);

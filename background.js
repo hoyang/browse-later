@@ -22,16 +22,15 @@ browser.browserAction.onClicked.addListener(function () {
     });
 });
 
-
 browser.menus.create({
     id: browse_later_tab_menu_id,
-    title: "Add current tab to Browse-later",
+    title: browser.i18n.getMessage("browseLaterTabMenu"),
     contexts: ["tab"]
 });
 
 browser.menus.create({
     id: browse_later_all_tab_menu_id,
-    title: "Add all tabs to Browse-later",
+    title: browser.i18n.getMessage("browseLaterAllTabMenu"),
     contexts: ["tab"]
 });
 

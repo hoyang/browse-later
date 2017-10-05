@@ -1,0 +1,59 @@
+{
+    "extensionName": {
+        "message": "Browse Later",
+        "description": "Name of the extension."
+    },
+
+    "extensionDescription": {
+        "message": "Stash tabs and browse later.",
+        "description": "Description of the extension."
+    },
+
+    "slogan": {
+        "message": "Browse-later,<br>it really whips the llama's ass!"
+    },
+
+    "pageActionTitle": {
+        "message": "Browse later"
+    },
+
+    "browserActionTitle": {
+        "message": "Browse now"
+    },
+
+    "tabListOpen": {
+        "message": "OPEN ALL"
+    },
+
+    "tabListCopy": {
+        "message": "Copy the URL list of all your tabs"
+    },
+
+    "tabListClear": {
+        "message": "CLEAR ALL"
+    },
+
+    "tabItemCopyTitle": {
+        "message": "Copy"
+    },
+
+    "tabItemRemoveTitle": {
+        "message": "Remove"
+    },
+
+    "browseLaterTabMenu": {
+        "message": "Add current tab to B1rowse-later"
+    },
+
+    "browseLaterAllTabMenu": {
+        "message": "Add all tabs to Browse-later"
+    },
+
+    "browserActionEmptyTitle": {
+        "message": "Click heart icon inside addressbar to save tab."
+    },
+
+    "browserActionCounterTitle": {
+        "message": "Click to restore $COUNT tabs."
+    }
+}

@@ -1,0 +1,59 @@
+{
+    "extensionName": {
+        "message": "Browse Later",
+        "description": "Name of the extension."
+    },
+
+    "extensionDescription": {
+        "message": "暂存标签页以便稍后浏览",
+        "description": "Description of the extension."
+    },
+
+    "slogan": {
+        "message": "稍后浏览，<br>it really whips the llama's ass!"
+    },
+
+    "pageActionTitle": {
+        "message": "稍后浏览"
+    },
+
+    "browserActionTitle": {
+        "message": "现在浏览"
+    },
+
+    "tabListOpen": {
+        "message": "打开全部"
+    },
+
+    "tabListCopy": {
+        "message": "复制全部链接地址"
+    },
+
+    "tabListClear": {
+        "message": "清除全部"
+    },
+
+    "tabItemCopyTitle": {
+        "message": "复制地址"
+    },
+
+    "tabItemRemoveTitle": {
+        "message": "移除"
+    },
+
+    "browseLaterTabMenu": {
+        "message": "稍后浏览当前标签页"
+    },
+
+    "browseLaterAllTabMenu": {
+        "message": "稍后浏览全部标签页"
+    },
+
+    "browserActionEmptyTitle": {
+        "message": "点击地址栏里的图标来暂存标签页"
+    },
+
+    "browserActionCounterTitle": {
+        "message": "点击查看暂存的 $COUNT 个标签页"
+    }
+}

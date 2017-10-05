@@ -192,11 +192,11 @@ let updateBrowserAction = function (callback) {
     log("updateBrowserAction");
     getAllSavesTabs().then((tabs) => {
         if(tabs.length > 0) {
-            browser.browserAction.setTitle({title: "Click to restore " + tabs.length.toString() + " tabs."});
+            browser.browserAction.setTitle({title: browser.i18n.getMessage("browserActionCounterTitle").replace("$COUNT", tabs.length.toString())});
             browser.browserAction.setBadgeText({text: tabs.length.toString()});
             browser.browserAction.setBadgeBackgroundColor({color: "green"});
         } else {
-            browser.browserAction.setTitle({title: "Click heart icon inside addressbar to save tab."});
+            browser.browserAction.setTitle({title: browser.i18n.getMessage("browserActionEmptyTitle")});
             browser.browserAction.setBadgeText({text: ""});
             browser.browserAction.setBadgeBackgroundColor({color: "gray"});
         }
