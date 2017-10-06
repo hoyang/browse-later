@@ -1,0 +1,59 @@
+{
+    "extensionName": {
+        "message": "Browse Later",
+        "description": "Name of the extension."
+    },
+
+    "extensionDescription": {
+        "message": "Guarde sus pestañas y visítelas después.",
+        "description": "Description of the extension."
+    },
+
+    "slogan": {
+        "message": "Browse-later,<br>it really whips the llama's ass!"
+    },
+
+    "pageActionTitle": {
+        "message": "Visitar después"
+    },
+
+    "browserActionTitle": {
+        "message": "Visitar ahora"
+    },
+
+    "tabListOpen": {
+        "message": "ABRIR TODO"
+    },
+
+    "tabListCopy": {
+        "message": "Copiar las URL de todas sus pestañas"
+    },
+
+    "tabListClear": {
+        "message": "LIMPIAR TODO"
+    },
+
+    "tabItemCopyTitle": {
+        "message": "Copiar"
+    },
+
+    "tabItemRemoveTitle": {
+        "message": "Remover"
+    },
+
+    "browseLaterTabMenu": {
+        "message": "Agregar la pestaña actual a Browse-later"
+    },
+
+    "browseLaterAllTabMenu": {
+        "message": "Agregar todas las pestañas a Browse-later"
+    },
+
+    "browserActionEmptyTitle": {
+        "message": "Haga clic en el icono del corazón dentro de la barra de direcciones para guardar la pestaña."
+    },
+
+    "browserActionCounterTitle": {
+        "message": "Haga clic para restaurar $COUNT pestaña(s)."
+    }
+}
