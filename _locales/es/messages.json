@@ -50,7 +50,7 @@
     },
 
     "browserActionEmptyTitle": {
-        "message": "Haga clic en el icono del corazón dentro de la barra de direcciones para guardar la pestaña."
+        "message": "Haga clic en el icono agregar marcador en la barra de direcciones para guardar la pestaña."
     },
 
     "browserActionCounterTitle": {
