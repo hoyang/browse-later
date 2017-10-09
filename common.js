@@ -182,7 +182,19 @@ let saveTab = function (id, url, title, pinned, favicon) {
         storage_backend.set(obj).then(() => {
             updateBrowserAction();
         });
-        browser.tabs.remove(id);
+
+        browser.tabs.query({currentWindow: true}).then((tabs) => {
+            if(tabs.length > 1) {
+                browser.tabs.remove(id);
+            } else {
+                browser.tabs.create({
+                    "url": "about:home",
+                    "pinned": false
+                }).then(() => {
+                    browser.tabs.remove(id);
+                });
+            }
+        });
     }).catch((reason) => {
         log("saveTab Error, " + reason);
     });
