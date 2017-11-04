@@ -41,12 +41,24 @@
         "message": "Remover"
     },
 
+    "tabItemGroupOpenAllTitle": {
+        "message": "Open all tabs in this Group"
+    },
+
+    "tabItemGroupOpenAllNewWindowTitle": {
+        "message": "Open all tabs in this Group with New window"
+    },
+
     "browseLaterTabMenu": {
         "message": "Agregar la pestaña actual a Browse-later"
     },
 
     "browseLaterAllTabMenu": {
         "message": "Agregar todas las pestañas a Browse-later"
+    },
+
+    "browseLaterAllTabGroupMenu": {
+        "message": "Add all tabs to Browse-later in a Group"
     },
 
     "browserActionEmptyTitle": {

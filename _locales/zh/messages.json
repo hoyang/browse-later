@@ -41,12 +41,24 @@
         "message": "移除"
     },
 
+    "tabItemGroupOpenAllTitle": {
+        "message": "打开该组全部标签页"
+    },
+
+    "tabItemGroupOpenAllNewWindowTitle": {
+        "message": "在新窗口中打开该组全部标签页"
+    },
+
     "browseLaterTabMenu": {
         "message": "稍后浏览当前标签页"
     },
 
     "browseLaterAllTabMenu": {
         "message": "稍后浏览全部标签页"
+    },
+
+    "browseLaterAllTabGroupMenu": {
+        "message": "稍后浏览全部标签页，并放在一个标签组里"
     },
 
     "browserActionEmptyTitle": {

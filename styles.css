@@ -41,6 +41,20 @@ ul li {
     background-color: #f8f8f8;
 }
 
+.tab_list_item_group_li {
+    padding: 0 0 0 10px;
+}
+
+.tab_item_group {
+    padding: 0px;
+    margin: 0px;
+}
+
+.group_item {
+    margin-left: 18px;
+    padding: 0px;
+}
+
 .tab_list_item_a {
     display: block;
     background-position: 0 center;
@@ -79,6 +93,19 @@ ul li {
     background-repeat: no-repeat;
 }
 
+.tab_list_item_group_li > ul > li:first-child > .tab_list_item_a {
+    font-weight: bold;
+    color: #666;
+}
+
+.tab_list_item_group_li .tab_item_menu {
+    margin-left: 8px;
+}
+
+.tab_list_item_group_li > ul > li:not(:first-child) > .tab_item_menu {
+    margin-left: 0px;
+}
+
 .copy_item {
     background-size: 16px;
     background-image: url(icons/copy_url.png);
@@ -86,6 +113,15 @@ ul li {
 
 .delete_item {
     background-image: url(icons/delete.png);
+}
+
+.group_open_all {
+    background-size: 16px;
+    background-image: url(icons/open_all.png);
+}
+
+.group_open_all_new_window {
+    background-image: url(icons/select_all.png);
 }
 
 #container {
@@ -179,6 +215,14 @@ ul li {
 .action_bar {
     display: flex;
     justify-content: flex-end;
+}
+
+.hidden {
+    display: none;
+}
+
+.shown {
+    display: block;
 }
 
 #tab_list_open {

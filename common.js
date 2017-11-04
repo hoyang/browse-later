@@ -2,6 +2,7 @@ let storage_key = "BrowseLaterTabs";
 let storage_opt_key = "BrowseLaterOptions";
 let browse_later_tab_menu_id = "browse_later_tab_menu_id";
 let browse_later_all_tab_menu_id = "browse_later_all_tab_menu_id";
+let browse_later_all_tab_group_menu_id = "browse_later_all_tab_group_menu_id";
 
 let debug_log = false;
 
@@ -126,6 +127,54 @@ let getAllSavesTabs = function () {
     });
 }
 
+let saveGroupTabs = function (window_tabs) {
+    getAllSavesTabs().then((tabs) => {
+
+        group_tabs = [];
+
+        window_tabs.forEach(function(tab) {
+            let save_tab = {
+                "title": tab.title,
+                "url": tab.url,
+                "pinned": tab.pinned,
+                "favicon": tab.favIconUrl
+            };
+            group_tabs.push(save_tab);
+        });
+
+        var save_time = new Date();
+        var group = {
+            "title": save_time.toLocaleString(),
+            "tabs": group_tabs,
+            "favicon": "",
+            "group_id": save_time.getTime(),
+            "url": save_time.getTime().toString()
+        }
+
+        tabs.push(group);
+
+        var obj = {};
+        obj[storage_key] = clearDuplicateURLs(e => e.url, tabs);
+        storage_backend.set(obj).then(() => {
+            updateBrowserAction();
+        });
+
+        browser.tabs.query({currentWindow: true, pinned: false}).then((tabs) => {
+            browser.tabs.create({
+                "url": "about:home",
+                "pinned": false
+            });
+
+            tabs.forEach(function(tab) {
+                browser.tabs.remove(tab.id);
+            });
+        });
+
+    }).catch((reason) => {
+        log("saveTab Error, " + reason);
+    });
+}
+
 let saveTabs = function (window_tabs) {
     getAllSavesTabs().then((tabs) => {
         window_tabs.forEach(function(tab) {
@@ -221,10 +270,19 @@ let updateBrowserAction = function (callback) {
 let openAllTabs = function() {
     getAllSavesTabs().then((tabs) => {
         tabs.forEach(function(tab) {
-            browser.tabs.create({
-                "url": tab.url,
-                "pinned": tab.pinned
-            });
+            if("group_id" in tab) {
+                tab.tabs.forEach(function(group_tab) {
+                    browser.tabs.create({
+                        "url": group_tab.url,
+                        "pinned": group_tab.pinned
+                    });
+                });
+            } else {
+                browser.tabs.create({
+                    "url": tab.url,
+                    "pinned": tab.pinned
+                });
+            }
         });
         storage_backend.remove(storage_key).then(() => {
             updateBrowserAction(window.close);
@@ -236,13 +294,71 @@ let openAllTabs = function() {
     return false;
 }
 
+let openTabGroup = function(event) {
+    event.preventDefault();
+    var group_id = event.target.parentNode.parentNode.parentNode.parentNode.dataset.group_id;
+
+    getAllSavesTabs().then((tabs) => {
+        tabs.forEach(function(tab) {
+            if("group_id" in tab && tab.group_id == Number.parseInt(group_id)) {
+                tab.tabs.forEach(function(group_tab) {
+                    browser.tabs.create({
+                        "url": group_tab.url,
+                        "pinned": group_tab.pinned
+                    });
+                });
+            }
+        });
+
+        removeTabGroup(event);
+
+    }).catch((reason) => {
+        log("openTabGroup Error, " + reason);
+    });
+
+    return false;
+}
+
+let openTabGroupNewWindow = function(event) {
+    event.preventDefault();
+    var group_id = event.target.parentNode.parentNode.parentNode.parentNode.dataset.group_id;
+
+    getAllSavesTabs().then((tabs) => {
+        tabs.forEach(function(tab) {
+            if("group_id" in tab && tab.group_id == Number.parseInt(group_id)) {
+                var urls = [];
+                tab.tabs.forEach(function(group_tab) {
+                    urls.push(group_tab.url);
+                });
+
+                browser.windows.create({
+                    url: urls
+                });
+            }
+        });
+
+        removeTabGroup(event);
+
+    }).catch((reason) => {
+        log("openTabGroupNewWindow Error, " + reason);
+    });
+
+    return false;
+}
+
 let copyAllTabs = function(event) {
     event.preventDefault();
 
     getAllSavesTabs().then((tabs) => {
         var urls = "";
         tabs.forEach(function(tab) {
-            urls += tab.url + "\n";
+            if("group_id" in tab) {
+                tab.tabs.forEach(function(group_tab) {
+                    urls += group_tab.url + "\n";
+                });
+            } else {
+                urls += tab.url + "\n";
+            }
         });
         copyToClipboard(urls);
         window.close();
@@ -256,20 +372,52 @@ let copyAllTabs = function(event) {
 let openTab = function(event) {
     event.preventDefault();
 
+    var group_id = event.target.parentNode.parentNode.parentNode.dataset.group_id;
+    
     getAllSavesTabs().then((tabs) => {
-        var new_tabs = [];
-        tabs.forEach(function(tab) {
-            if(tab.url != event.target.href) {
-                new_tabs.push(tab);
+        if(group_id != undefined) {
+            var new_tabs = [];
+            for(var i=0; i<tabs.length; i++) {
+                if("group_id" in tabs[i] && tabs[i].group_id == Number.parseInt(group_id)) {
+                    var tab_group = tabs[i];
+                    var new_group_tabs = [];
+                    tab_group.tabs.forEach(function(tab) {
+                        if(tab.url != event.target.href) {
+                            new_group_tabs.push(tab);
+                        }
+                    });
+                    tabs[i].tabs = new_group_tabs;
+                    if(tabs[i].tabs.length > 0) {
+                        new_tabs.push(tabs[i]);
+                    } else {
+                        event.target.parentNode.parentNode.parentNode.remove();
+                    }
+                } else {
+                    new_tabs.push(tabs[i]);
+                }
             }
-        });
+            
+            var obj = {};
+            obj[storage_key] = new_tabs;
+            storage_backend.set(obj).then(() => {
+                browser.tabs.create({ "url": event.target.href });
+                updateBrowserAction(window.close);
+            });
+        } else {
+            var new_tabs = [];
+            tabs.forEach(function(tab) {
+                if(tab.url != event.target.href) {
+                    new_tabs.push(tab);
+                }
+            });
 
-        var obj = {};
-        obj[storage_key] = new_tabs;
-        storage_backend.set(obj).then(() => {
-            browser.tabs.create({ "url": event.target.href });
-            updateBrowserAction(window.close);
-        });
+            var obj = {};
+            obj[storage_key] = new_tabs;
+            storage_backend.set(obj).then(() => {
+                browser.tabs.create({ "url": event.target.href });
+                updateBrowserAction(window.close);
+            });
+        }
     }).catch((reason) => {
         log("openTab Error, " + reason);
     });
@@ -283,27 +431,121 @@ let cleanupAllTabs = function () {
     });
 }
 
+let copyTabGroup = function (event) {
+    event.preventDefault();
+    
+    var group_id = event.target.parentNode.parentNode.parentNode.parentNode.dataset.group_id;
+    copy_string = "";
+    
+    getAllSavesTabs().then((tabs) => {
+        if(group_id != undefined) {
+            var copy_tabs = [];
+            for(var i=0; i<tabs.length; i++) {
+                if("group_id" in tabs[i]) {
+                    if(tabs[i].group_id == Number.parseInt(group_id)) {
+                        copy_tabs = tabs[i].tabs;
+                        copy_tabs.forEach(function (tab){
+                            copy_string += tab.url + "\n";
+                        });
+                    }
+                }
+            }
+        }
+
+        copyToClipboard(copy_string);
+        window.close();    
+    }).catch((reason) => {
+        log("copyTabGroup Error, " + reason);
+    });
+    
+    return false;
+}
+
+let removeTabGroup = function (event) {
+    event.preventDefault();
+    
+    var group_id = event.target.parentNode.parentNode.parentNode.parentNode.dataset.group_id;
+    event.target.parentNode.parentNode.parentNode.remove();
+
+    getAllSavesTabs().then((tabs) => {
+        if(group_id != undefined) {
+            var new_tabs = [];
+            for(var i=0; i<tabs.length; i++) {
+                if("group_id" in tabs[i]) {
+                    if(tabs[i].group_id != Number.parseInt(group_id)) {
+                        new_tabs.push(tabs[i]);
+                    }
+                } else {
+                    new_tabs.push(tabs[i]);
+                }
+            }
+            
+            var obj = {};
+            obj[storage_key] = new_tabs;
+            storage_backend.set(obj).then(() => {
+                updateBrowserAction(window.close);
+            });
+        }
+    }).catch((reason) => {
+        log("removeTabGroup Error, " + reason);
+    });
+
+    return false;
+}
+
 let removeTab = function (event) {
     event.preventDefault();
-    event.target.parentNode.parentNode.remove();
+
+    var group_id = event.target.parentNode.parentNode.parentNode.parentNode.dataset.group_id;
+
     var target_url = event.target.dataset.url;
     getAllSavesTabs().then((tabs) => {
-        var new_tabs = [];
-        tabs.forEach(function(tab) {
-            if(tab.url != target_url) {
-                new_tabs.push(tab);
+        if(group_id != undefined) {
+            var new_tabs = [];
+            for(var i=0; i<tabs.length; i++) {
+                if("group_id" in tabs[i] && tabs[i].group_id == Number.parseInt(group_id)) {
+                    var tab_group = tabs[i];
+                    var new_group_tabs = [];
+                    tab_group.tabs.forEach(function(tab) {
+                        if(tab.url != target_url) {
+                            new_group_tabs.push(tab);
+                        }
+                    });
+                    tabs[i].tabs = new_group_tabs;
+                    if(tabs[i].tabs.length > 0) {
+                        new_tabs.push(tabs[i]);
+                    } else {
+                        event.target.parentNode.parentNode.parentNode.parentNode.remove();
+                    }
+                } else {
+                    new_tabs.push(tabs[i]);
+                }
             }
-        });
+            
+            var obj = {};
+            obj[storage_key] = new_tabs;
+            storage_backend.set(obj).then(() => {
+                updateBrowserAction();
+            });
+        } else {
+            var new_tabs = [];
+            tabs.forEach(function(tab) {
+                if(tab.url != target_url) {
+                    new_tabs.push(tab);
+                }
+            });
 
-        var obj = {};
-        obj[storage_key] = new_tabs;
-        storage_backend.set(obj).then(() => {
-            updateBrowserAction();
-        });
+            var obj = {};
+            obj[storage_key] = new_tabs;
+            storage_backend.set(obj).then(() => {
+                updateBrowserAction();
+            });
+        }
+
+        event.target.parentNode.parentNode.remove();
     }).catch((reason) => {
         log("removeTab Error, " + reason);
     });
-
     return false;
 }
 

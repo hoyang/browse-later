@@ -34,12 +34,22 @@ browser.menus.create({
     contexts: ["tab"]
 });
 
+browser.menus.create({
+    id: browse_later_all_tab_group_menu_id,
+    title: browser.i18n.getMessage("browseLaterAllTabGroupMenu"),
+    contexts: ["tab"]
+});
+
 browser.menus.onClicked.addListener((info, tab) => {
     if(info.menuItemId == browse_later_tab_menu_id) {
         saveTab(tab.id, tab.url, tab.title, tab.pinned, tab.favIconUrl);
     } else if (info.menuItemId == browse_later_all_tab_menu_id) {
         browser.tabs.query({currentWindow: true, pinned: false}).then((tabs) => {
             saveTabs(tabs);
+        });
+    } else if (info.menuItemId == browse_later_all_tab_group_menu_id) {
+        browser.tabs.query({currentWindow: true, pinned: false}).then((tabs) => {
+            saveGroupTabs(tabs);
         });
     }
 });
