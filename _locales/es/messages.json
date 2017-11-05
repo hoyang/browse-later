@@ -42,11 +42,11 @@
     },
 
     "tabItemGroupOpenAllTitle": {
-        "message": "Open all tabs in this Group"
+        "message": "Abrir todas las pestañas de este grupo"
     },
 
     "tabItemGroupOpenAllNewWindowTitle": {
-        "message": "Open all tabs in this Group with New window"
+        "message": "Abrir todas las pestañas de este grupo en una nueva ventana"
     },
 
     "browseLaterTabMenu": {
@@ -58,7 +58,7 @@
     },
 
     "browseLaterAllTabGroupMenu": {
-        "message": "Add all tabs to Browse-later in a Group"
+        "message": "Agregar todas las pestañas a un grupo en Browse-later"
     },
 
     "browserActionEmptyTitle": {
