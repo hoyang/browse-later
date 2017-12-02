@@ -1,10 +1,30 @@
 let storage_key = "BrowseLaterTabs";
 let storage_opt_key = "BrowseLaterOptions";
+
 let browse_later_tab_menu_id = "browse_later_tab_menu_id";
 let browse_later_all_tab_menu_id = "browse_later_all_tab_menu_id";
 let browse_later_all_tab_group_menu_id = "browse_later_all_tab_group_menu_id";
 
-let debug_log = false;
+let image_reverse_search_menu_id = "ImageReverseSearch";
+let google_search_link_fix_menu_id = "GoogleSearchLinkFix";
+
+let debug_log = true;
+
+let options_ui_text_attr = "data-text";
+
+let defaultOptions = [
+    {key: "KeepTabAfterStash", default: false},
+    {key: "PinTabGroupOnTop", default: false},
+    {key: "HideTabsCounterBadge", default: false},
+    {key: "HideTabsRightMenu", default: false},
+    {key: "KeepTabAfterRestore", default: false},
+    {key: "ConfirmBeforeDeletion", default: false},
+
+    {key: "BypassSadPanda", default: false, extra: true},
+    {key: "ConsoleLogImagesURL", default: false, extra: true},
+    {key: "MakeGoogleGreatAgain", default: false, extra: true},
+    {key: "MakeImageSearchable", default: false, extra: true}
+];
 
 var log = function (msg) {
     if(debug_log) {
@@ -12,16 +32,52 @@ var log = function (msg) {
     }
 }
 
-// choose storage backend
-//TODO:: add sync storage option
-var _storage_backend = browser.storage.local;
-let local_settings = _storage_backend.get(storage_opt_key);
-if(local_settings && local_settings.sync) {
-    _storage_backend = browser.storage.sync;
-    log("browser.storage.sync");
+let storage_backend = browser.storage.local;
+
+let saveOptions = function (key, val) {
+    var obj = {};
+
+    window.options.forEach(function(e, i) {
+        if(e.key == key) {
+            window.options[i].value = val;
+            log(window.options[i]);
+        }
+    });
+
+    obj[storage_opt_key] = window.options;
+    storage_backend.set(obj);
 }
 
-let storage_backend = _storage_backend;
+let getOption = function (saved_options, key) {
+    for(var i=0; i< saved_options.length; i++) {
+        if(saved_options[i].key == key) {
+            return (saved_options[i].value == undefined ? saved_options[i].default : saved_options[i].value);
+        }
+    }
+    return undefined;
+}
+
+let loadOptions = function (callback) {
+    storage_backend.get(storage_opt_key).then((result) => {
+        if(result && storage_opt_key in result) {
+            log("loadOptions");
+            log(result[storage_opt_key]);
+            callback(result[storage_opt_key]);
+        } else {
+            callback(defaultOptions);
+        }
+    }, (error) => {
+        log("storage_opt_key error, " + error);
+    }).catch((reason) => {
+        log("storage_opt_key exception, " + reason);
+    });
+}
+
+let _ = browser.i18n.getMessage;
+
+window.options = window.options || defaultOptions;
+
+loadOptions(function (saved_options){ window.options = saved_options; });
 
 let getScrollbarWidth = function () {
     var outer = document.createElement("div");
@@ -68,58 +124,43 @@ let copyToClipboard = function (text) {
 let createPageAction = function () {
     browser.tabs.query({active: true, currentWindow: true}).then((tabs) => {
         let tab = tabs[0];
+        if(tab.url.startsWith("http://") || tab.url.startsWith("https://") || tab.url.startsWith("ftp://")) {
+            browser.pageAction.show(tab.id);
 
-        browser.pageAction.show(tab.id);
+            loadOptions(function (saved_options) {
+                var make_google_great_again = getOption(saved_options, "MakeGoogleGreatAgain");
+                if(make_google_great_again) {
+                    makeGoogleGreatAgain(tab.url);
+                }
+            });
+        }
     });
 }
 
 let clearDuplicateURLs = function (prop, urls) {
-  var mySet = new Set();
-  return urls.filter(function(x) {
-    var key = prop(x), isNew = !mySet.has(key);
-    if (isNew) mySet.add(key);
-    return isNew;
-  });
+    var mySet = new Set();
+    return urls.filter(function(x) {
+        var key = prop(x), isNew = !mySet.has(key);
+        if (isNew) mySet.add(key);
+            return isNew;
+    });
 }
 
 let getAllSavesTabs = function () {
     return new Promise(function (resolve, reject) {
         var saved_tabs = storage_backend.get(storage_key);
         saved_tabs.then((result) => {
-            // back compatibility for previous release.
-            let _saved_tabs_json = localStorage.getItem(storage_key);
-            var _saved_tabs = [];
-            if(_saved_tabs_json) {
-                _saved_tabs = JSON.parse(_saved_tabs_json);
-                // migrate storage
-                log("migrate");
-                log(_saved_tabs.concat(result[storage_key]));
-                var urls = _saved_tabs.concat(result[storage_key]).filter(function(n){
+            if(result && storage_key in result) {
+                var urls = result[storage_key].filter(function(n){
                     return n != undefined
                 });
                 urls = clearDuplicateURLs(e => e.url, urls);
-                var obj = {};
-                obj[storage_key] = urls;
-                storage_backend.set(obj);
-                log("done");
-                localStorage.removeItem(storage_key);
-            }
-
-            if(_saved_tabs.length > 0 || (result && storage_key in result)) {
-                if(result && storage_key in result) {
-                    var urls = _saved_tabs.concat(result[storage_key]).filter(function(n){
-                        return n != undefined
-                    });
-                    urls = clearDuplicateURLs(e => e.url, urls);
-                    resolve(urls);
-                } else {
-                    resolve(_saved_tabs);
-                }
+                resolve(urls);
             } else {
                 resolve([]);
             }
         }, (error) => {
-            log("getAllSavesTabs Reject, " + reason);
+            log("getAllSavesTabs Reject, " + error);
             reject(error);
         }).catch((reason) => {
             log("getAllSavesTabs Error, " + reason);
@@ -137,6 +178,7 @@ let saveGroupTabs = function (window_tabs) {
                 "title": tab.title,
                 "url": tab.url,
                 "pinned": tab.pinned,
+                "added_time": Date.now(),
                 "favicon": tab.favIconUrl
             };
             group_tabs.push(save_tab);
@@ -147,6 +189,7 @@ let saveGroupTabs = function (window_tabs) {
             "title": save_time.toLocaleString(),
             "tabs": group_tabs,
             "favicon": "",
+            "added_time": Date.now(),
             "group_id": save_time.getTime(),
             "url": save_time.getTime().toString()
         }
@@ -159,15 +202,20 @@ let saveGroupTabs = function (window_tabs) {
             updateBrowserAction();
         });
 
-        browser.tabs.query({currentWindow: true, pinned: false}).then((tabs) => {
-            browser.tabs.create({
-                "url": "about:home",
-                "pinned": false
-            });
+        loadOptions(function (saved_options) {
+            var keep_tab_after_stash = getOption(saved_options, "KeepTabAfterStash");
+            if(!keep_tab_after_stash) {
+                browser.tabs.query({currentWindow: true, pinned: false}).then((tabs) => {
+                    browser.tabs.create({
+                        "url": "about:home",
+                        "pinned": false
+                    });
 
-            tabs.forEach(function(tab) {
-                browser.tabs.remove(tab.id);
-            });
+                    tabs.forEach(function(tab) {
+                        browser.tabs.remove(tab.id);
+                    });
+                });
+            }
         });
 
     }).catch((reason) => {
@@ -182,6 +230,7 @@ let saveTabs = function (window_tabs) {
                 "title": tab.title,
                 "url": tab.url,
                 "pinned": tab.pinned,
+                "added_time": Date.now(),
                 "favicon": tab.favIconUrl
             };
             tabs.push(save_tab);
@@ -193,15 +242,20 @@ let saveTabs = function (window_tabs) {
             updateBrowserAction();
         });
 
-        browser.tabs.query({currentWindow: true, pinned: false}).then((tabs) => {
-            browser.tabs.create({
-                "url": "about:home",
-                "pinned": false
-            });
+        loadOptions(function (saved_options) {
+            var keep_tab_after_stash = getOption(saved_options, "KeepTabAfterStash");
+            if(!keep_tab_after_stash) {
+                browser.tabs.query({currentWindow: true, pinned: false}).then((tabs) => {
+                    browser.tabs.create({
+                        "url": "about:home",
+                        "pinned": false
+                    });
 
-            tabs.forEach(function(tab) {
-                browser.tabs.remove(tab.id);
-            });
+                    tabs.forEach(function(tab) {
+                        browser.tabs.remove(tab.id);
+                    });
+                });
+            }
         });
 
     }).catch((reason) => {
@@ -222,6 +276,7 @@ let saveTab = function (id, url, title, pinned, favicon) {
                 "title": title,
                 "url": url,
                 "pinned": pinned,
+                "added_time": Date.now(),
                 "favicon": favicon
             };
             tabs.push(save_tab);
@@ -232,18 +287,26 @@ let saveTab = function (id, url, title, pinned, favicon) {
             updateBrowserAction();
         });
 
-        browser.tabs.query({currentWindow: true}).then((tabs) => {
-            if(tabs.length > 1) {
-                browser.tabs.remove(id);
-            } else {
-                browser.tabs.create({
-                    "url": "about:home",
-                    "pinned": false
-                }).then(() => {
-                    browser.tabs.remove(id);
-                });
-            }
+        loadOptions(function (saved_options) {
+            var keep_tab_after_stash = getOption(saved_options, "KeepTabAfterStash");
+            browser.tabs.query({currentWindow: true}).then((tabs) => {
+                if(tabs.length > 1) {
+                    if(!keep_tab_after_stash) {
+                        browser.tabs.remove(id);
+                    }
+                } else {
+                    if(!keep_tab_after_stash) {
+                        browser.tabs.create({
+                            "url": "about:home",
+                            "pinned": false
+                        }).then(() => {
+                            browser.tabs.remove(id);
+                        });
+                    }
+                }
+            });
         });
+        
     }).catch((reason) => {
         log("saveTab Error, " + reason);
     });
@@ -251,17 +314,26 @@ let saveTab = function (id, url, title, pinned, favicon) {
 
 let updateBrowserAction = function (callback) {
     log("updateBrowserAction");
+    
     getAllSavesTabs().then((tabs) => {
-        if(tabs.length > 0) {
-            browser.browserAction.setTitle({title: browser.i18n.getMessage("browserActionCounterTitle").replace("$COUNT", tabs.length.toString())});
-            browser.browserAction.setBadgeText({text: tabs.length.toString()});
-            browser.browserAction.setBadgeBackgroundColor({color: "green"});
-        } else {
-            browser.browserAction.setTitle({title: browser.i18n.getMessage("browserActionEmptyTitle")});
-            browser.browserAction.setBadgeText({text: ""});
-            browser.browserAction.setBadgeBackgroundColor({color: "gray"});
-        }
-        if(callback) callback();
+        loadOptions(function (saved_options) {
+            var hide_tabs_count_badge = getOption(saved_options, "HideTabsCounterBadge");
+            if(!hide_tabs_count_badge) {
+                if(tabs.length > 0) {
+                    browser.browserAction.setTitle({title: browser.i18n.getMessage("browserActionCounterTitle").replace("$COUNT", tabs.length.toString())});
+                    browser.browserAction.setBadgeText({text: tabs.length.toString()});
+                    browser.browserAction.setBadgeBackgroundColor({color: "green"});
+                } else {
+                    browser.browserAction.setTitle({title: browser.i18n.getMessage("browserActionEmptyTitle")});
+                    browser.browserAction.setBadgeText({text: ""});
+                    browser.browserAction.setBadgeBackgroundColor({color: "gray"});
+                }
+            } else {
+                browser.browserAction.setBadgeText({text: ""});
+            }
+
+            if(callback) callback();
+        });
     }).catch((reason) => {
         log("updateBrowserAction Error, " + reason);
     });
@@ -284,9 +356,18 @@ let openAllTabs = function() {
                 });
             }
         });
-        storage_backend.remove(storage_key).then(() => {
-            updateBrowserAction(window.close);
+
+        loadOptions(function (saved_options) {
+            var keep_tab_after_restore = getOption(saved_options, "KeepTabAfterRestore");
+            if(!keep_tab_after_restore) {
+                storage_backend.remove(storage_key).then(() => {
+                    updateBrowserAction(window.close);
+                });
+            } else {
+                updateBrowserAction(window.close);
+            }
         });
+        
     }).catch((reason) => {
         log("openAllTabs Error, " + reason);
     });
@@ -310,7 +391,12 @@ let openTabGroup = function(event) {
             }
         });
 
-        removeTabGroup(event);
+        loadOptions(function (saved_options) {
+            var keep_tab_after_restore = getOption(saved_options, "KeepTabAfterRestore");
+            if(!keep_tab_after_restore) {
+                removeTabGroup(event);
+            }
+        });
 
     }).catch((reason) => {
         log("openTabGroup Error, " + reason);
@@ -337,7 +423,12 @@ let openTabGroupNewWindow = function(event) {
             }
         });
 
-        removeTabGroup(event);
+        loadOptions(function (saved_options) {
+            var keep_tab_after_restore = getOption(saved_options, "KeepTabAfterRestore");
+            if(!keep_tab_after_restore) {
+                removeTabGroup(event);
+            }
+        });
 
     }).catch((reason) => {
         log("openTabGroupNewWindow Error, " + reason);
@@ -375,49 +466,60 @@ let openTab = function(event) {
     var group_id = event.target.parentNode.parentNode.parentNode.dataset.group_id;
     
     getAllSavesTabs().then((tabs) => {
-        if(group_id != undefined) {
-            var new_tabs = [];
-            for(var i=0; i<tabs.length; i++) {
-                if("group_id" in tabs[i] && tabs[i].group_id == Number.parseInt(group_id)) {
-                    var tab_group = tabs[i];
-                    var new_group_tabs = [];
-                    tab_group.tabs.forEach(function(tab) {
-                        if(tab.url != event.target.href) {
-                            new_group_tabs.push(tab);
+        loadOptions(function (saved_options) {
+            var keep_tab_after_restore = getOption(saved_options, "KeepTabAfterRestore");
+            if(group_id != undefined) {
+                var new_tabs = [];
+                for(var i=0; i<tabs.length; i++) {
+                    if("group_id" in tabs[i] && tabs[i].group_id == Number.parseInt(group_id)) {
+                        var tab_group = tabs[i];
+                        var new_group_tabs = [];
+                        tab_group.tabs.forEach(function(tab) {
+                            if(tab.url != event.target.href) {
+                                new_group_tabs.push(tab);
+                            } else {
+                                if(keep_tab_after_restore) {
+                                    new_group_tabs.push(tab);
+                                }
+                            }
+                        });
+                        tabs[i].tabs = new_group_tabs;
+                        if(tabs[i].tabs.length > 0) {
+                            new_tabs.push(tabs[i]);
+                        } else {
+                            event.target.parentNode.parentNode.parentNode.remove();
                         }
-                    });
-                    tabs[i].tabs = new_group_tabs;
-                    if(tabs[i].tabs.length > 0) {
-                        new_tabs.push(tabs[i]);
                     } else {
-                        event.target.parentNode.parentNode.parentNode.remove();
+                        new_tabs.push(tabs[i]);
                     }
-                } else {
-                    new_tabs.push(tabs[i]);
                 }
+                
+                var obj = {};
+                obj[storage_key] = new_tabs;
+                storage_backend.set(obj).then(() => {
+                    browser.tabs.create({ "url": event.target.href });
+                    updateBrowserAction(window.close);
+                });
+            } else {
+                var new_tabs = [];
+                tabs.forEach(function(tab) {
+                    if(tab.url != event.target.href) {
+                        new_tabs.push(tab);
+                    } else {
+                        if(keep_tab_after_restore) {
+                            new_tabs.push(tab);
+                        }
+                    }
+                });
+    
+                var obj = {};
+                obj[storage_key] = new_tabs;
+                storage_backend.set(obj).then(() => {
+                    browser.tabs.create({ "url": event.target.href });
+                    updateBrowserAction(window.close);
+                });
             }
-            
-            var obj = {};
-            obj[storage_key] = new_tabs;
-            storage_backend.set(obj).then(() => {
-                browser.tabs.create({ "url": event.target.href });
-                updateBrowserAction(window.close);
-            });
-        } else {
-            var new_tabs = [];
-            tabs.forEach(function(tab) {
-                if(tab.url != event.target.href) {
-                    new_tabs.push(tab);
-                }
-            });
-
-            var obj = {};
-            obj[storage_key] = new_tabs;
-            storage_backend.set(obj).then(() => {
-                browser.tabs.create({ "url": event.target.href });
-                updateBrowserAction(window.close);
-            });
-        }
+        });
     }).catch((reason) => {
         log("openTab Error, " + reason);
     });

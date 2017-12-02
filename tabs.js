@@ -15,7 +15,7 @@ var createURLElementItem = function(tab) {
     tab_item_url.target = "_blank";
     tab_item_url.title = tab.title;
 
-    tab_item_url.style.backgroundImage = "url(icons/icon.png)";
+    tab_item_url.style.backgroundImage = "url(../icons/icon.png)";
     if(tab.favicon != undefined) {
         tab_item_url.style.backgroundImage = "url("+ tab.favicon +")";
     }
@@ -63,7 +63,7 @@ var createURLGroupElementItem= function(tab) {
     tab_item_url.target = "_blank";
     tab_item_url.title = tab.title;
 
-    tab_item_url.style.backgroundImage = "url(icons/BrowseLater-32.png)";
+    tab_item_url.style.backgroundImage = "url(../icons/BrowseLater-32.png)";
     
     var tab_item_menu = document.createElement("div");
     tab_item_menu.setAttribute("class", "tab_item_menu");
@@ -175,18 +175,40 @@ var showTabsList = function(event) {
             tab_list_header_container.style.display = 'flex';
             tabs_list.style.display = 'block';
 
-            tabs.reverse().forEach(function(tab) {
-                if(typeof(tab) != 'undefined') {
-                    if("tabs" in tab) {
-                        let tab_group_item = createURLGroupElementItem(tab);
-                        tabs_list.appendChild(tab_group_item);
-                    } else {
-                        let tab_item = createURLElementItem(tab);
-                        tabs_list.appendChild(tab_item);
-                    }
+            loadOptions(function (saved_options) {
+                var pin_tab_group_on_top = getOption(saved_options, "PinTabGroupOnTop");
+                if(pin_tab_group_on_top) {
+                    tabs.reverse().forEach(function(tab) {
+                        if(typeof(tab) != 'undefined') {
+                            if("tabs" in tab) {
+                                let tab_group_item = createURLGroupElementItem(tab);
+                                tabs_list.appendChild(tab_group_item);
+                            }
+                        }
+                    });
+                    tabs.reverse().forEach(function(tab) {
+                        if(typeof(tab) != 'undefined') {
+                            if(!("tabs" in tab)) {
+                                let tab_item = createURLElementItem(tab);
+                                tabs_list.appendChild(tab_item);
+                            }
+                        }
+                    });
+                } else { // !pin_tab_group_on_top
+                    tabs.reverse().forEach(function(tab) {
+                        if(typeof(tab) != 'undefined') {
+                            if("tabs" in tab) {
+                                let tab_group_item = createURLGroupElementItem(tab);
+                                tabs_list.appendChild(tab_group_item);
+                            } else {
+                                let tab_item = createURLElementItem(tab);
+                                tabs_list.appendChild(tab_item);
+                            }
+                        }
+                    });
                 }
             });
-
+            
             document.getElementById("tab_list_open").addEventListener("click", openAllTabs);
             document.getElementById("tab_list_copy").addEventListener("click", copyAllTabs);
             document.getElementById("tab_list_clear").addEventListener("click", cleanupAllTabs);

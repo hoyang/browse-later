@@ -18,27 +18,39 @@ browser.pageAction.onClicked.addListener(function () {
 
 browser.browserAction.onClicked.addListener(function () {
     browser.browserAction.setPopup({
-        popup: "/tabs_list.html"
+        popup: "pages/tabs.html"
     });
 });
 
-browser.menus.create({
-    id: browse_later_tab_menu_id,
-    title: browser.i18n.getMessage("browseLaterTabMenu"),
-    contexts: ["tab"]
-});
+(function() {
+    loadOptions(function (saved_options) {
+        var hide_tabs_right_menu = getOption(saved_options, "HideTabsRightMenu");
+        if(!hide_tabs_right_menu) {
+            browser.menus.create({
+                id: browse_later_tab_menu_id,
+                title: browser.i18n.getMessage("browseLaterTabMenu"),
+                contexts: ["tab"]
+            });
+            
+            browser.menus.create({
+                id: browse_later_all_tab_menu_id,
+                title: browser.i18n.getMessage("browseLaterAllTabMenu"),
+                contexts: ["tab"]
+            });
+            
+            browser.menus.create({
+                id: browse_later_all_tab_group_menu_id,
+                title: browser.i18n.getMessage("browseLaterAllTabGroupMenu"),
+                contexts: ["tab"]
+            });
+        }
 
-browser.menus.create({
-    id: browse_later_all_tab_menu_id,
-    title: browser.i18n.getMessage("browseLaterAllTabMenu"),
-    contexts: ["tab"]
-});
-
-browser.menus.create({
-    id: browse_later_all_tab_group_menu_id,
-    title: browser.i18n.getMessage("browseLaterAllTabGroupMenu"),
-    contexts: ["tab"]
-});
+        var make_image_searchable = getOption(saved_options, "MakeImageSearchable");
+        if(make_image_searchable) {
+            makeImageSearchable();
+        }
+    });
+})();
 
 browser.menus.onClicked.addListener((info, tab) => {
     if(info.menuItemId == browse_later_tab_menu_id) {
@@ -50,6 +62,13 @@ browser.menus.onClicked.addListener((info, tab) => {
     } else if (info.menuItemId == browse_later_all_tab_group_menu_id) {
         browser.tabs.query({currentWindow: true, pinned: false}).then((tabs) => {
             saveGroupTabs(tabs);
+        });
+    } else if(info.menuItemId == image_reverse_search_menu_id) {
+        searchByImage(info.srcUrl);
+    } else if(info.menuItemId == google_search_link_fix_menu_id) {
+        log("make google great again");
+        browser.tabs.executeScript({
+            code: "console.log(rwt); if(rwt != undefined) { log(\"google has great again\"); rwt = function () { return true; } }"
         });
     }
 });

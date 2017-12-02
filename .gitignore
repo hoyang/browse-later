@@ -1,2 +1,4 @@
 *.DS_Store
 web-ext-artifacts
+.vscode
+browse-later.zip

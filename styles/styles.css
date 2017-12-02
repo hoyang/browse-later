@@ -108,20 +108,20 @@ ul li {
 
 .copy_item {
     background-size: 16px;
-    background-image: url(icons/copy_url.png);
+    background-image: url(../icons/copy_url.png);
 }
 
 .delete_item {
-    background-image: url(icons/delete.png);
+    background-image: url(../icons/delete.png);
 }
 
 .group_open_all {
     background-size: 16px;
-    background-image: url(icons/open_all.png);
+    background-image: url(../icons/open_all.png);
 }
 
 .group_open_all_new_window {
-    background-image: url(icons/select_all.png);
+    background-image: url(../icons/select_all.png);
 }
 
 #container {
@@ -226,17 +226,17 @@ ul li {
 }
 
 #tab_list_open {
-    background-image: url(icons/open_all.png);
+    background-image: url(../icons/open_all.png);
     color: #66bb6a;
 }
 
 #tab_list_clear {
-    background-image: url(icons/clear_all.png);
+    background-image: url(../icons/clear_all.png);
     color: #00796B;
 }
 
 #tab_list_copy {
-    background-image: url(icons/select_all.png);
+    background-image: url(../icons/select_all.png);
     color: #ccc;
     background-size: 16px;
     padding: 0 20px;

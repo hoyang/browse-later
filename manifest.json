@@ -1,12 +1,12 @@
 {
     "manifest_version": 2,
     "name": "__MSG_extensionName__",
-    "version": "3.1.3",
+    "version": "3.2.3",
     "description": "__MSG_extensionDescription__",
     "homepage_url": "https://github.com/hoyang/browse-later",
     "icons": {
-        "48": "/icons/icon.svg",
-        "96": "/icons/icon.svg"
+        "48": "icons/icon.svg",
+        "96": "icons/icon.svg"
     },
 
     "applications": {
@@ -19,7 +19,9 @@
         "tabs",
         "storage",
         "clipboardWrite",
-        "menus"
+        "menus",
+        "contextMenus",
+        "activeTab"
     ],
 
     "page_action": {
@@ -31,12 +33,18 @@
     "browser_action": {
         "default_icon": "icons/icon.svg",
         "default_title": "__MSG_browserActionTitle__",
-        "default_popup": "/tabs_list.html",
+        "default_popup": "pages/tabs.html",
         "browser_style": true
     },
 
     "background": {
-        "scripts": ["common.js", "background.js"]
+        "scripts": ["common.js", "content_helper.js", "background.js"]
+    },
+
+    "options_ui": {
+        "page": "pages/options.html",
+        "open_in_tab": true,
+        "browser_style": true
     },
 
     "default_locale": "en"

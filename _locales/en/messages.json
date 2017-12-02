@@ -67,5 +67,57 @@
 
     "browserActionCounterTitle": {
         "message": "Click to restore $COUNT tabs."
+    },
+
+    "KeepTabAfterStash": {
+        "message": "Keep tab open after stash"
+    },
+
+    "PinTabGroupOnTop": {
+        "message": "Pin tab group on top"
+    },
+    
+    "HideTabsCounterBadge": {
+        "message": "Hide tab's counter badge"
+    },
+    
+    "HideTabsRightMenu": {
+        "message": "Hide tab's right menu"
+    },
+    
+    "KeepTabAfterRestore": {
+        "message": "Keep stash tab after restore"
+    },
+
+    "ConfirmBeforeDeletion": {
+        "message": "Make confirm before clear"
+    },
+
+    "ConfirmMessageBeforeDeletion": {
+        "message": "Are you sure want do this?"
+    },
+
+    "BypassSadPanda": {
+        "message": "Bypass 'Sad Panda'"
+    },
+
+    "ConsoleLogImagesURL": {
+        "message": "Console.log all images URL"
+    },
+
+    "MakeGoogleGreatAgain": {
+        "message": "Make google great again"
+    },
+
+    "MakeImageSearchable": {
+        "message": "Make image searchable"
+    },
+
+    "ImageReverseSearch" : {
+        "message": "Reverse Image Search"
+    },
+
+    "GoogleSearchLinkFix": {
+        "message": "Google Search Link Fix"
     }
 }
