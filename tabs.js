@@ -13,7 +13,7 @@ var createURLElementItem = function(tab) {
     tab_item_url.href = tab.url;
     tab_item_url.innerText = tab.title;
     tab_item_url.target = "_blank";
-    tab_item_url.title = tab.title;
+    tab_item_url.title = tab.title + "\n" + tab.url;
 
     tab_item_url.style.backgroundImage = "url(../icons/icon.png)";
     if(tab.favicon != undefined) {
