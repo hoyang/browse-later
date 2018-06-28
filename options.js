@@ -1,7 +1,7 @@
 
 let defaultOptionsEventListener = [
-    {key: "HideTabsRightMenu", event_listener: function (event){
-        //saveOptions("HideTabsRightMenu", event.target.checked);
+    {key: defaultOptionsName.HideTabsRightMenu, event_listener: function (event){
+        //saveOptions(defaultOptionsName.HideTabsRightMenu, event.target.checked);
         if(!event.target.checked) {
             browser.menus.create({
                 id: browse_later_tab_menu_id,
@@ -26,12 +26,12 @@ let defaultOptionsEventListener = [
             browser.menus.remove(browse_later_all_tab_group_menu_id);
         }
     }},
-    {key: "HideTabsCounterBadge", event_listener: function (event){
-        //saveOptions("HideTabsCounterBadge", event.target.checked);
+    {key: defaultOptionsName.HideTabsCounterBadge, event_listener: function (event){
+        //saveOptions(defaultOptionsName.HideTabsCounterBadge, event.target.checked);
         updateBrowserAction();
     }},
 
-    {key: "MakeImageSearchable", event_listener: function (event) {
+    {key: defaultOptionsName.MakeImageSearchable, event_listener: function (event) {
         if(event.target.checked) {
             makeImageSearchable();
         } else {
@@ -40,7 +40,7 @@ let defaultOptionsEventListener = [
     }}
 ];
 
-let generate_boolean_section = function (key, val, default_val, event_listener) {
+let generate_boolean_section = function (key, val, default_val, unavailable, event_listener) {
     var section = document.createElement("tr");
     var key_section = document.createElement("td");
     var val_section = document.createElement("td");
@@ -64,12 +64,20 @@ let generate_boolean_section = function (key, val, default_val, event_listener) 
     section.appendChild(val_section);
     section.appendChild(key_section);
 
+    if(unavailable) {
+        checkbox.disabled = true;
+        label.setAttribute("style", "color: grey; text-decoration: line-through;");
+    }
+
     return section;
 }
 
 let showOptionsUI = function () {
     loadOptions(function (saved_options){
         saved_options.forEach(function (e){
+            if(typeof(e.unavailable) == 'undefined') {
+                e.unavailable = false;
+            }
             if(typeof(e.default) == "boolean") {
                 var event_listener = function (event) {
                     log(e.key + "[save]: " + event.target.checked);
@@ -84,8 +92,8 @@ let showOptionsUI = function () {
                         };
                     }
                 });
-
-                document.getElementById((e.extra == undefined) ? "options_container" : "meddlesome_container").appendChild(generate_boolean_section(e.key, e.value, e.default, event_listener));
+                var option_ui = generate_boolean_section(e.key, e.value, e.default, e.unavailable, event_listener);
+                document.getElementById((e.extra == undefined) ? "options_container" : "meddlesome_container").appendChild(option_ui);
             }
         });
         

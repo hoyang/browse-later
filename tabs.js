@@ -176,8 +176,7 @@ var showTabsList = function(event) {
             tabs_list.style.display = 'block';
 
             loadOptions(function (saved_options) {
-                var pin_tab_group_on_top = getOption(saved_options, "PinTabGroupOnTop");
-                if(pin_tab_group_on_top) {
+                if(getOption(saved_options, defaultOptionsName.PinTabGroupOnTop)) {
                     tabs.reverse().forEach(function(tab) {
                         if(typeof(tab) != 'undefined') {
                             if("tabs" in tab) {

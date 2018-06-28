@@ -7,23 +7,39 @@ let browse_later_all_tab_group_menu_id = "browse_later_all_tab_group_menu_id";
 
 let image_reverse_search_menu_id = "ImageReverseSearch";
 let google_search_link_fix_menu_id = "GoogleSearchLinkFix";
+let youtube_time_mark_menu_id = "YoutubeTimeMark";
 
 let debug_log = true;
 
 let options_ui_text_attr = "data-text";
 
-let defaultOptions = [
-    {key: "KeepTabAfterStash", default: false},
-    {key: "PinTabGroupOnTop", default: false},
-    {key: "HideTabsCounterBadge", default: false},
-    {key: "HideTabsRightMenu", default: false},
-    {key: "KeepTabAfterRestore", default: false},
-    {key: "ConfirmBeforeDeletion", default: false},
+let defaultOptionsName = {};
+defaultOptionsName.MakeGoogleGreatAgain = "MakeGoogleGreatAgain";
+defaultOptionsName.MakeImageSearchable = "MakeImageSearchable";
+defaultOptionsName.ConsoleLogImagesURL = "ConsoleLogImagesURL";
+defaultOptionsName.BypassSadPanda = "BypassSadPanda";
+defaultOptionsName.KeepYoutubeWatchedTime = "KeepYoutubeWatchedTime";
 
-    {key: "BypassSadPanda", default: false, extra: true},
-    {key: "ConsoleLogImagesURL", default: false, extra: true},
-    {key: "MakeGoogleGreatAgain", default: false, extra: true},
-    {key: "MakeImageSearchable", default: false, extra: true}
+defaultOptionsName.KeepTabAfterStash = "KeepTabAfterStash";
+defaultOptionsName.PinTabGroupOnTop = "PinTabGroupOnTop";
+defaultOptionsName.HideTabsCounterBadge = "HideTabsCounterBadge";
+defaultOptionsName.HideTabsRightMenu = "HideTabsRightMenu";
+defaultOptionsName.KeepTabAfterRestore = "KeepTabAfterRestore";
+defaultOptionsName.ConfirmBeforeDeletion = "ConfirmBeforeDeletion";
+
+let defaultOptions = [
+    {key: defaultOptionsName.KeepTabAfterStash, default: false},
+    {key: defaultOptionsName.PinTabGroupOnTop, default: false},
+    {key: defaultOptionsName.HideTabsCounterBadge, default: false},
+    {key: defaultOptionsName.HideTabsRightMenu, default: false},
+    {key: defaultOptionsName.KeepTabAfterRestore, default: false},
+    {key: defaultOptionsName.ConfirmBeforeDeletion, default: false, unavailable: true},
+
+    {key: defaultOptionsName.BypassSadPanda, default: false, extra: true, unavailable: true},
+    {key: defaultOptionsName.ConsoleLogImagesURL, default: false, extra: true},
+    {key: defaultOptionsName.MakeGoogleGreatAgain, default: false, extra: true, unavailable: true},
+    {key: defaultOptionsName.MakeImageSearchable, default: false, extra: true},
+    {key: defaultOptionsName.KeepYoutubeWatchedTime, default: false, extra: true, unavailable: true}
 ];
 
 var log = function (msg) {
@@ -128,9 +144,11 @@ let createPageAction = function () {
             browser.pageAction.show(tab.id);
 
             loadOptions(function (saved_options) {
-                var make_google_great_again = getOption(saved_options, "MakeGoogleGreatAgain");
-                if(make_google_great_again) {
+                if(getOption(saved_options, defaultOptionsName.MakeGoogleGreatAgain)) {
                     makeGoogleGreatAgain(tab.url);
+                }
+                if(getOption(saved_options, defaultOptionsName.KeepYoutubeWatchedTime)) {
+                    
                 }
             });
         }
@@ -203,7 +221,7 @@ let saveGroupTabs = function (window_tabs) {
         });
 
         loadOptions(function (saved_options) {
-            var keep_tab_after_stash = getOption(saved_options, "KeepTabAfterStash");
+            var keep_tab_after_stash = getOption(saved_options, defaultOptionsName.KeepTabAfterStash);
             if(!keep_tab_after_stash) {
                 browser.tabs.query({currentWindow: true, pinned: false}).then((tabs) => {
                     browser.tabs.create({
@@ -243,7 +261,7 @@ let saveTabs = function (window_tabs) {
         });
 
         loadOptions(function (saved_options) {
-            var keep_tab_after_stash = getOption(saved_options, "KeepTabAfterStash");
+            var keep_tab_after_stash = getOption(saved_options, defaultOptionsName.KeepTabAfterStash);
             if(!keep_tab_after_stash) {
                 browser.tabs.query({currentWindow: true, pinned: false}).then((tabs) => {
                     browser.tabs.create({
@@ -288,7 +306,7 @@ let saveTab = function (id, url, title, pinned, favicon) {
         });
 
         loadOptions(function (saved_options) {
-            var keep_tab_after_stash = getOption(saved_options, "KeepTabAfterStash");
+            var keep_tab_after_stash = getOption(saved_options, defaultOptionsName.KeepTabAfterStash);
             browser.tabs.query({currentWindow: true}).then((tabs) => {
                 if(tabs.length > 1) {
                     if(!keep_tab_after_stash) {
@@ -317,7 +335,7 @@ let updateBrowserAction = function (callback) {
     
     getAllSavesTabs().then((tabs) => {
         loadOptions(function (saved_options) {
-            var hide_tabs_count_badge = getOption(saved_options, "HideTabsCounterBadge");
+            var hide_tabs_count_badge = getOption(saved_options, defaultOptionsName.HideTabsCounterBadge);
             if(!hide_tabs_count_badge) {
                 if(tabs.length > 0) {
                     browser.browserAction.setTitle({title: browser.i18n.getMessage("browserActionCounterTitle").replace("$COUNT", tabs.length.toString())});
@@ -358,7 +376,7 @@ let openAllTabs = function() {
         });
 
         loadOptions(function (saved_options) {
-            var keep_tab_after_restore = getOption(saved_options, "KeepTabAfterRestore");
+            var keep_tab_after_restore = getOption(saved_options, defaultOptionsName.KeepTabAfterRestore);
             if(!keep_tab_after_restore) {
                 storage_backend.remove(storage_key).then(() => {
                     updateBrowserAction(window.close);
@@ -392,7 +410,7 @@ let openTabGroup = function(event) {
         });
 
         loadOptions(function (saved_options) {
-            var keep_tab_after_restore = getOption(saved_options, "KeepTabAfterRestore");
+            var keep_tab_after_restore = getOption(saved_options, defaultOptionsName.KeepTabAfterRestore);
             if(!keep_tab_after_restore) {
                 removeTabGroup(event);
             }
@@ -467,7 +485,7 @@ let openTab = function(event) {
     
     getAllSavesTabs().then((tabs) => {
         loadOptions(function (saved_options) {
-            var keep_tab_after_restore = getOption(saved_options, "KeepTabAfterRestore");
+            var keep_tab_after_restore = getOption(saved_options, defaultOptionsName.KeepTabAfterRestore);
             if(group_id != undefined) {
                 var new_tabs = [];
                 for(var i=0; i<tabs.length; i++) {

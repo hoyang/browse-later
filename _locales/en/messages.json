@@ -119,5 +119,13 @@
 
     "GoogleSearchLinkFix": {
         "message": "Google Search Link Fix"
+    },
+
+    "KeepYoutubeWatchedTime": {
+        "message": "Keep Youtube Watched Time"
+    },
+
+    "YoutubeTimeMark": {
+        "message": "Stash With Current Time"
     }
 }

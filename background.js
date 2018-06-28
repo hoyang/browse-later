@@ -24,7 +24,7 @@ browser.browserAction.onClicked.addListener(function () {
 
 (function() {
     loadOptions(function (saved_options) {
-        var hide_tabs_right_menu = getOption(saved_options, "HideTabsRightMenu");
+        var hide_tabs_right_menu = getOption(saved_options, defaultOptionsName.HideTabsRightMenu);
         if(!hide_tabs_right_menu) {
             browser.menus.create({
                 id: browse_later_tab_menu_id,
@@ -45,7 +45,7 @@ browser.browserAction.onClicked.addListener(function () {
             });
         }
 
-        var make_image_searchable = getOption(saved_options, "MakeImageSearchable");
+        var make_image_searchable = getOption(saved_options, defaultOptionsName.MakeImageSearchable);
         if(make_image_searchable) {
             makeImageSearchable();
         }
@@ -68,7 +68,7 @@ browser.menus.onClicked.addListener((info, tab) => {
     } else if(info.menuItemId == google_search_link_fix_menu_id) {
         log("make google great again");
         browser.tabs.executeScript({
-            code: "console.log(rwt); if(rwt != undefined) { log(\"google has great again\"); rwt = function () { return true; } }"
+            code: 'let rwt=function(){}'
         });
     }
 });
