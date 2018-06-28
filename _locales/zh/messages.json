@@ -67,5 +67,65 @@
 
     "browserActionCounterTitle": {
         "message": "点击查看暂存的 $COUNT 个标签页"
+    },
+
+    "KeepTabAfterStash": {
+        "message": "暂存后不关闭标签页"
+    },
+
+    "PinTabGroupOnTop": {
+        "message": "标签页组显示在顶部"
+    },
+    
+    "HideTabsCounterBadge": {
+        "message": "隐藏地址栏图标的数字"
+    },
+    
+    "HideTabsRightMenu": {
+        "message": "隐藏标签页的右键菜单"
+    },
+    
+    "KeepTabAfterRestore": {
+        "message": "恢复标签页后仍然暂存"
+    },
+
+    "ConfirmBeforeDeletion": {
+        "message": "清除前提示确认"
+    },
+
+    "ConfirmMessageBeforeDeletion": {
+        "message": "你真的想这样做吗？"
+    },
+
+    "BypassSadPanda": {
+        "message": "解决 '伤心的熊猫'"
+    },
+
+    "ConsoleLogImagesURL": {
+        "message": "在控制台记录所有的图片网址"
+    },
+
+    "MakeGoogleGreatAgain": {
+        "message": "让谷歌再次伟大（搜索结果保持原始网址）"
+    },
+
+    "MakeImageSearchable": {
+        "message": "启用搜图功能"
+    },
+
+    "ImageReverseSearch" : {
+        "message": "搜图"
+    },
+
+    "GoogleSearchLinkFix": {
+        "message": "搜索结果保持原始网址"
+    },
+
+    "KeepYoutubeWatchedTime": {
+        "message": "保存油管页面时也保存当前观看时间"
+    },
+
+    "YoutubeTimeMark": {
+        "message": "从当前观看时间保存油管页面"
     }
 }
