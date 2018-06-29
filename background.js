@@ -45,8 +45,7 @@ browser.browserAction.onClicked.addListener(function () {
             });
         }
 
-        var make_image_searchable = getOption(saved_options, defaultOptionsName.MakeImageSearchable);
-        if(make_image_searchable) {
+        if(getOption(saved_options, defaultOptionsName.MakeImageSearchable)) {
             makeImageSearchable();
         }
     });
@@ -66,9 +65,15 @@ browser.menus.onClicked.addListener((info, tab) => {
     } else if(info.menuItemId == image_reverse_search_menu_id) {
         searchByImage(info.srcUrl);
     } else if(info.menuItemId == google_search_link_fix_menu_id) {
-        log("make google great again");
         browser.tabs.executeScript({
             code: 'let rwt=function(){}'
+        });
+    } else if(info.menuItemId == youtube_time_mark_menu_id) {
+        browser.tabs.executeScript({
+            code: `document.getElementById('movie_player').wrappedJSObject.getVideoUrl();`
+        }).then((url) => {
+            log("Saving Youtube URL: " + url);
+            saveTab(tab.id, url, tab.title, tab.pinned, tab.favIconUrl);
         });
     }
 });

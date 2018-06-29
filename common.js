@@ -39,7 +39,7 @@ let defaultOptions = [
     {key: defaultOptionsName.ConsoleLogImagesURL, default: false, extra: true},
     {key: defaultOptionsName.MakeGoogleGreatAgain, default: false, extra: true, unavailable: true},
     {key: defaultOptionsName.MakeImageSearchable, default: false, extra: true},
-    {key: defaultOptionsName.KeepYoutubeWatchedTime, default: false, extra: true, unavailable: true}
+    {key: defaultOptionsName.KeepYoutubeWatchedTime, default: false, extra: true}
 ];
 
 var log = function (msg) {
@@ -148,7 +148,8 @@ let createPageAction = function () {
                     makeGoogleGreatAgain(tab.url);
                 }
                 if(getOption(saved_options, defaultOptionsName.KeepYoutubeWatchedTime)) {
-                    
+                    log("KeepYoutubeWatchedTime: " + tab.url);
+                    makeYoutubeTimeMark(tab.url);
                 }
             });
         }

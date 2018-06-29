@@ -41,15 +41,18 @@ let makeImageUnsearchable = function () {
 }
 
 let searchByImage = function (image_src_url) {
-    let google_image_search_url = "https://www.google.com/searchbyimage?image_url=%s";
-    
+    var image_search_url = "https://www.google.com/searchbyimage?image_url=%s";
+    if(i18n.getMessage() == "zh") { // Baidu for chinese people, google was blocked.
+        image_search_url = "https://image.baidu.com/pcdutu?queryImageUrl=%s"
+    }
     browser.tabs.create({
-        url: google_image_search_url.replace('%s', encodeURIComponent(image_src_url)),
+        url: image_search_url.replace('%s', encodeURIComponent(image_src_url)),
     });
 }
 
 let makeYoutubeTimeMark = function (tab_url) {
     var url = new URL(tab_url);
+    log("makeYoutubeTimeMark: " + tab_url);
     if(url.host === "www.youtube.com"
         && url.pathname === "/watch"
         && url.search.startsWith("?v=")) {
@@ -65,20 +68,4 @@ let makeYoutubeTimeMark = function (tab_url) {
 
 let dontMakeYoutubeTimeMark = function () {
     browser.contextMenus.remove(youtube_time_mark_menu_id);
-}
-
-let getYoutubeVideoURLWithCurrentTime = function() {
-    if(location.host === "www.youtube.com"
-        && location.pathname === "/watch"
-        && location.search.startsWith("?v=")) {
-            var current_time_text = document.getElementsByClassName("ytp-time-current")[0].innerText;
-            var current_times = current_time_text.split(":").map(function(e){return Number(e);})
-            var total_seconds=0;
-            for(var i=current_times.length-1; i>=0;i--) {
-                total_seconds += current_times[current_times.length-1-i] * Math.pow(60, i);
-            }
-            return location.href + "&t=" + String(total_seconds);
-        }
-    
-    return location.href;
 }

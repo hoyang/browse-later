@@ -9,6 +9,10 @@
         "description": "Description of the extension."
     },
 
+    "lang": {
+        "message": "zh"
+    },
+
     "slogan": {
         "message": "稍后浏览，<br>标签页生而平等，这些标签页更平等。"
     },
@@ -110,7 +114,7 @@
     },
 
     "MakeImageSearchable": {
-        "message": "启用搜图功能"
+        "message": "启用搜图功能（右键菜单）"
     },
 
     "ImageReverseSearch" : {
@@ -122,7 +126,7 @@
     },
 
     "KeepYoutubeWatchedTime": {
-        "message": "保存油管页面时也保存当前观看时间"
+        "message": "保存油管页面时保存当前观看时间（右键菜单）"
     },
 
     "YoutubeTimeMark": {

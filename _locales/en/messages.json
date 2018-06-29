@@ -9,6 +9,10 @@
         "description": "Description of the extension."
     },
 
+    "lang": {
+        "message": "en"
+    },
+
     "slogan": {
         "message": "Browse-later,<br>it really whips the llama's ass!"
     },
@@ -106,11 +110,11 @@
     },
 
     "MakeGoogleGreatAgain": {
-        "message": "Make google great again"
+        "message": "Make google great again (keep original URL)"
     },
 
     "MakeImageSearchable": {
-        "message": "Make image searchable"
+        "message": "Make image searchable (via Right menu)"
     },
 
     "ImageReverseSearch" : {
@@ -122,10 +126,10 @@
     },
 
     "KeepYoutubeWatchedTime": {
-        "message": "Keep Youtube Watched Time"
+        "message": "Keep Youtube's watched time (via Right menu)"
     },
 
     "YoutubeTimeMark": {
-        "message": "Stash With Current Time"
+        "message": "Stash with watched time"
     }
 }
