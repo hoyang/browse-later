@@ -1,0 +1,71 @@
+{
+    "extensionName": {
+        "message": "Посмотреть позже",
+        "description": "Name of the extension."
+    },
+
+    "extensionDescription": {
+        "message": "Откладывайте вкладки и просматривайте позже.",
+        "description": "Description of the extension."
+    },
+
+    "slogan": {
+        "message": "Browse-later,<br>it really whips the llama's ass!"
+    },
+
+    "pageActionTitle": {
+        "message": "Посмотреть позже"
+    },
+
+    "browserActionTitle": {
+        "message": "Посмотреть сейчас"
+    },
+
+    "tabListOpen": {
+        "message": "ОКРЫТЬ ВСЕ"
+    },
+
+    "tabListCopy": {
+        "message": "Скопировать список адресов всех ваших вкладок"
+    },
+
+    "tabListClear": {
+        "message": "ОЧИСТИТЬ ВСЕ"
+    },
+
+    "tabItemCopyTitle": {
+        "message": "Копировать"
+    },
+
+    "tabItemRemoveTitle": {
+        "message": "Удалить"
+    },
+
+    "tabItemGroupOpenAllTitle": {
+        "message": "Открыть все вкладки из этой группы"
+    },
+
+    "tabItemGroupOpenAllNewWindowTitle": {
+        "message": "Открыть все вкладки из этой группы в новом окне"
+    },
+
+    "browseLaterTabMenu": {
+        "message": "Добавить эту вкладку в Посмотреть позже"
+    },
+
+    "browseLaterAllTabMenu": {
+        "message": "Добавить все вкладки в Посмотреть позже"
+    },
+
+    "browseLaterAllTabGroupMenu": {
+        "message": "Добавить все вкладки в Посмотреть позже, сгруппировав"
+    },
+
+    "browserActionEmptyTitle": {
+        "message": "Нажмите на значок закладки в адресной строке для сохранения вкладки"
+    },
+
+    "browserActionCounterTitle": {
+        "message": "Нажмите для восстановления $COUNT вкладок"
+    }
+}
