@@ -1,0 +1,135 @@
+{
+    "extensionName": {
+        "message": "Посмотреть позже",
+        "description": "Name of the extension."
+    },
+
+    "extensionDescription": {
+        "message": "Откладывайте вкладки и просматривайте позже.",
+        "description": "Description of the extension."
+    },
+
+    "lang": {
+        "message": "ru"
+    },
+
+    "slogan": {
+        "message": "Browse-later,<br>it really whips the llama's ass!"
+    },
+
+    "pageActionTitle": {
+        "message": "Посмотреть позже"
+    },
+
+    "browserActionTitle": {
+        "message": "Посмотреть сейчас"
+    },
+
+    "tabListOpen": {
+        "message": "ОКРЫТЬ ВСЕ"
+    },
+
+    "tabListCopy": {
+        "message": "Скопировать список адресов всех ваших вкладок"
+    },
+
+    "tabListClear": {
+        "message": "ОЧИСТИТЬ ВСЕ"
+    },
+
+    "tabItemCopyTitle": {
+        "message": "Копировать"
+    },
+
+    "tabItemRemoveTitle": {
+        "message": "Удалить"
+    },
+
+    "tabItemGroupOpenAllTitle": {
+        "message": "Открыть все вкладки из этой группы"
+    },
+
+    "tabItemGroupOpenAllNewWindowTitle": {
+        "message": "Открыть все вкладки из этой группы в новом окне"
+    },
+
+    "browseLaterTabMenu": {
+        "message": "Добавить эту вкладку в Посмотреть позже"
+    },
+
+    "browseLaterAllTabMenu": {
+        "message": "Добавить все вкладки в Посмотреть позже"
+    },
+
+    "browseLaterAllTabGroupMenu": {
+        "message": "Добавить все вкладки в Посмотреть позже, сгруппировав"
+    },
+
+    "browserActionEmptyTitle": {
+        "message": "Нажмите на значок закладки в адресной строке для сохранения вкладки"
+    },
+
+    "browserActionCounterTitle": {
+        "message": "Нажмите для восстановления $COUNT вкладок"
+    },
+
+    "KeepTabAfterStash": {
+        "message": "Оставлять вкладки открытыми после откладывания"
+    },
+
+    "PinTabGroupOnTop": {
+        "message": "Прикрепить группы вкладок вверху списка"
+    },
+    
+    "HideTabsCounterBadge": {
+        "message": "Скрыть счётчик отложенных вкладок на значке"
+    },
+    
+    "HideTabsRightMenu": {
+        "message": "Скрыть меню дополнения из меню вкладки"
+    },
+    
+    "KeepTabAfterRestore": {
+        "message": "Оставлять вкладки отложенными после восстановления"
+    },
+
+    "ConfirmBeforeDeletion": {
+        "message": "Спрашивать подверждение перед очисткой"
+    },
+
+    "ConfirmMessageBeforeDeletion": {
+        "message": "Вы уверены, что хотите сделать это?"
+    },
+
+    "BypassSadPanda": {
+        "message": "Обойти 'Грустную панду'"
+    },
+
+    "ConsoleLogImagesURL": {
+        "message": "Отправлять URL всех изображений в console.log"
+    },
+
+    "MakeGoogleGreatAgain": {
+        "message": "Сделать Google снова великим (сохранять исходный URL)"
+    },
+
+    "MakeImageSearchable": {
+        "message": "Включить поиск по картинкам (через меню)"
+    },
+
+    "ImageReverseSearch" : {
+        "message": "Поиск по изображениям"
+    },
+
+    "GoogleSearchLinkFix": {
+        "message": "Исправить ссылки поиска Google"
+    },
+
+    "KeepYoutubeWatchedTime": {
+        "message": "Сохранять позицию просмотра в Youtube (через меню)"
+    },
+
+    "YoutubeTimeMark": {
+        "message": "Отложить с сохранением позиции просмотра"
+    }
+}
