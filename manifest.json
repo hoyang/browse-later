@@ -38,7 +38,7 @@
     },
 
     "background": {
-        "scripts": ["common.js", "content_helper.js", "background.js"]
+        "scripts": ["constants.js", "common.js", "content_helper.js", "background.js"]
     },
 
     "options_ui": {

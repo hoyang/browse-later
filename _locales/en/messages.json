@@ -93,6 +93,10 @@
         "message": "Keep stash tab after restore"
     },
 
+    "ReverseListOrder": {
+        "message": "Sort in reverse order, last added on top"
+    },
+
     "ConfirmBeforeDeletion": {
         "message": "Make confirm before clear"
     },

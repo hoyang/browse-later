@@ -1,54 +1,11 @@
-let storage_key = "BrowseLaterTabs";
-let storage_opt_key = "BrowseLaterOptions";
+let storage_backend = browser.storage.local;
+let _ = browser.i18n.getMessage;
 
-let browse_later_tab_menu_id = "browse_later_tab_menu_id";
-let browse_later_all_tab_menu_id = "browse_later_all_tab_menu_id";
-let browse_later_all_tab_group_menu_id = "browse_later_all_tab_group_menu_id";
-
-let image_reverse_search_menu_id = "ImageReverseSearch";
-let google_search_link_fix_menu_id = "GoogleSearchLinkFix";
-let youtube_time_mark_menu_id = "YoutubeTimeMark";
-
-let debug_log = true;
-
-let options_ui_text_attr = "data-text";
-
-let defaultOptionsName = {};
-defaultOptionsName.MakeGoogleGreatAgain = "MakeGoogleGreatAgain";
-defaultOptionsName.MakeImageSearchable = "MakeImageSearchable";
-defaultOptionsName.ConsoleLogImagesURL = "ConsoleLogImagesURL";
-defaultOptionsName.BypassSadPanda = "BypassSadPanda";
-defaultOptionsName.KeepYoutubeWatchedTime = "KeepYoutubeWatchedTime";
-
-defaultOptionsName.KeepTabAfterStash = "KeepTabAfterStash";
-defaultOptionsName.PinTabGroupOnTop = "PinTabGroupOnTop";
-defaultOptionsName.HideTabsCounterBadge = "HideTabsCounterBadge";
-defaultOptionsName.HideTabsRightMenu = "HideTabsRightMenu";
-defaultOptionsName.KeepTabAfterRestore = "KeepTabAfterRestore";
-defaultOptionsName.ConfirmBeforeDeletion = "ConfirmBeforeDeletion";
-
-let defaultOptions = [
-    {key: defaultOptionsName.KeepTabAfterStash, default: false},
-    {key: defaultOptionsName.PinTabGroupOnTop, default: false},
-    {key: defaultOptionsName.HideTabsCounterBadge, default: false},
-    {key: defaultOptionsName.HideTabsRightMenu, default: false},
-    {key: defaultOptionsName.KeepTabAfterRestore, default: false},
-    {key: defaultOptionsName.ConfirmBeforeDeletion, default: false, unavailable: true},
-
-    {key: defaultOptionsName.BypassSadPanda, default: false, extra: true, unavailable: true},
-    {key: defaultOptionsName.ConsoleLogImagesURL, default: false, extra: true},
-    {key: defaultOptionsName.MakeGoogleGreatAgain, default: false, extra: true, unavailable: true},
-    {key: defaultOptionsName.MakeImageSearchable, default: false, extra: true},
-    {key: defaultOptionsName.KeepYoutubeWatchedTime, default: false, extra: true}
-];
-
-var log = function (msg) {
+let log = function (msg) {
     if(debug_log) {
         console.log(msg);
     }
 }
-
-let storage_backend = browser.storage.local;
 
 let saveOptions = function (key, val) {
     var obj = {};
@@ -88,8 +45,6 @@ let loadOptions = function (callback) {
         log("storage_opt_key exception, " + reason);
     });
 }
-
-let _ = browser.i18n.getMessage;
 
 window.options = window.options || defaultOptions;
 

@@ -6,7 +6,9 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 });
 
 browser.tabs.onActivated.addListener((activeInfo) => {
-    createPageAction();
+    if(typeof(createPageAction) !== "undefined") {
+        createPageAction();
+    }
 });
 
 browser.pageAction.onClicked.addListener(function () {
@@ -23,6 +25,7 @@ browser.browserAction.onClicked.addListener(function () {
 });
 
 (function() {
+    if(typeof(loadOptions) === "undefined") return;
     loadOptions(function (saved_options) {
         var hide_tabs_right_menu = getOption(saved_options, defaultOptionsName.HideTabsRightMenu);
         if(!hide_tabs_right_menu) {
@@ -78,4 +81,6 @@ browser.menus.onClicked.addListener((info, tab) => {
     }
 });
 
-updateBrowserAction(); // update badge text and title
+if(typeof(updateBrowserAction) !== "undefined") {
+    updateBrowserAction(); // update badge text and title
+}

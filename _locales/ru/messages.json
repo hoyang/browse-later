@@ -93,6 +93,10 @@
         "message": "Оставлять вкладки отложенными после восстановления"
     },
 
+    "ReverseListOrder": {
+        "message": "Sort in reverse order, last added on top"
+    },
+
     "ConfirmBeforeDeletion": {
         "message": "Спрашивать подверждение перед очисткой"
     },

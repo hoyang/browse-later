@@ -93,6 +93,10 @@
         "message": "恢复标签页后仍然暂存"
     },
 
+    "ReverseListOrder": {
+        "message": "倒序显示，最后添加的显示在顶部"
+    },
+
     "ConfirmBeforeDeletion": {
         "message": "清除前提示确认"
     },

@@ -1,7 +1,7 @@
-let tab_item_copy_title = browser.i18n.getMessage("tabItemCopyTitle");
-let tab_item_remove_title = browser.i18n.getMessage("tabItemRemoveTitle");
-let tab_item_group_open_all_title = browser.i18n.getMessage("tabItemGroupOpenAllTitle");
-let tab_item_group_open_all_new_window_title = browser.i18n.getMessage("tabItemGroupOpenAllNewWindowTitle");
+let tab_item_copy_title = _("tabItemCopyTitle");
+let tab_item_remove_title = _("tabItemRemoveTitle");
+let tab_item_group_open_all_title = _("tabItemGroupOpenAllTitle");
+let tab_item_group_open_all_new_window_title = _("tabItemGroupOpenAllNewWindowTitle");
 
 var createURLElementItem = function(tab) {
     var tab_item = document.createElement("li");
