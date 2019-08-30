@@ -42,7 +42,7 @@ let makeImageUnsearchable = function () {
 
 let searchByImage = function (image_src_url) {
     var image_search_url = "https://www.google.com/searchbyimage?image_url=%s";
-    if(i18n.getMessage() == "zh") { // Baidu for chinese people, google was blocked.
+    if(browser.i18n.getUILanguage() == "zh-CN") { // Baidu for chinese people, google was blocked.
         image_search_url = "https://image.baidu.com/pcdutu?queryImageUrl=%s"
     }
     browser.tabs.create({

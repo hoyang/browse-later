@@ -1,6 +1,3 @@
-let storage_backend = browser.storage.local;
-let _ = browser.i18n.getMessage;
-
 let log = function (msg) {
     if(debug_log) {
         console.log(msg);
