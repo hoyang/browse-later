@@ -105,10 +105,6 @@
         "message": "Are you sure want do this?"
     },
 
-    "BypassSadPanda": {
-        "message": "Bypass 'Sad Panda'"
-    },
-
     "ConsoleLogImagesURL": {
         "message": "Console.log all images URL"
     },

@@ -105,10 +105,6 @@
         "message": "Вы уверены, что хотите сделать это?"
     },
 
-    "BypassSadPanda": {
-        "message": "Обойти 'Грустную панду'"
-    },
-
     "ConsoleLogImagesURL": {
         "message": "Отправлять URL всех изображений в console.log"
     },

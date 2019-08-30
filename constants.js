@@ -17,7 +17,6 @@ let defaultOptionsName = {
     MakeGoogleGreatAgain: "MakeGoogleGreatAgain",
     MakeImageSearchable: "MakeImageSearchable",
     ConsoleLogImagesURL: "ConsoleLogImagesURL",
-    BypassSadPanda: "BypassSadPanda",
     KeepYoutubeWatchedTime: "KeepYoutubeWatchedTime",
     
     KeepTabAfterStash: "KeepTabAfterStash",
@@ -38,7 +37,6 @@ let defaultOptions = [
     {key: defaultOptionsName.ReverseListOrder, default: false},
     {key: defaultOptionsName.ConfirmBeforeDeletion, default: false, unavailable: true},
 
-    {key: defaultOptionsName.BypassSadPanda, default: false, extra: true, unavailable: true},
     {key: defaultOptionsName.ConsoleLogImagesURL, default: false, extra: true},
     {key: defaultOptionsName.MakeGoogleGreatAgain, default: false, extra: true, unavailable: true},
     {key: defaultOptionsName.MakeImageSearchable, default: false, extra: true},
