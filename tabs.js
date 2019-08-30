@@ -176,6 +176,9 @@ var showTabsList = function(event) {
             tabs_list.style.display = 'block';
 
             loadOptions(function (saved_options) {
+                if(getOption(saved_options, defaultOptionsName.ReverseListOrder)) {
+                    tabs.reverse();
+                }
                 if(getOption(saved_options, defaultOptionsName.PinTabGroupOnTop)) {
                     tabs.reverse().forEach(function(tab) {
                         if(typeof(tab) != 'undefined') {
