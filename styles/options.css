@@ -1,0 +1,46 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    padding-top: 100px;
+    background-color: white;
+    overflow-x: hidden;
+    font: 14px Helvetica Neue, Helvetica, Arial, Microsoft Yahei, Hiragino Sans GB, Heiti SC, WenQuanYi Micro Hei, sans-serif;
+}
+
+#container {
+    width: 360px;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+table {
+    width: 100%;
+}
+
+table tr th {
+    font-weight: bold;
+}
+
+table tr th:first-child {
+    text-align: right;
+    width: 20px;
+}
+
+table tr th:last-child {
+    text-align: left;
+    width: 340px;
+}
+
+table tr td button {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1em;
+}
+
+.description {
+    font-size: 11px;
+    color: gray;
+    font-weight: normal;
+}

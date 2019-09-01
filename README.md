@@ -6,3 +6,5 @@ _special thanks to Reedo0910 for his/hers **excellent** UI design & improvement.
 **i18n contributors:**
 
 _ivanruvalcaba (Spanish localization)_
+
+_shvchk (Russian localization)_

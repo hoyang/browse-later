@@ -9,6 +9,10 @@
         "description": "Description of the extension."
     },
 
+    "lang": {
+        "message": "en"
+    },
+
     "slogan": {
         "message": "Browse-later,<br>it really whips the llama's ass!"
     },
@@ -67,5 +71,65 @@
 
     "browserActionCounterTitle": {
         "message": "Click to restore $COUNT tabs."
+    },
+
+    "KeepTabAfterStash": {
+        "message": "Keep tab open after stash"
+    },
+
+    "PinTabGroupOnTop": {
+        "message": "Pin tab group on top"
+    },
+    
+    "HideTabsCounterBadge": {
+        "message": "Hide tab's counter badge"
+    },
+    
+    "HideTabsRightMenu": {
+        "message": "Hide tab's right menu"
+    },
+    
+    "KeepTabAfterRestore": {
+        "message": "Keep stash tab after restore"
+    },
+
+    "ReverseListOrder": {
+        "message": "Sort in reverse order, last added on top"
+    },
+
+    "ConfirmBeforeDeletion": {
+        "message": "Make confirm before clear"
+    },
+
+    "ConfirmMessageBeforeDeletion": {
+        "message": "Are you sure want do this?"
+    },
+
+    "ConsoleLogImagesURL": {
+        "message": "Console.log all images URL"
+    },
+
+    "MakeGoogleGreatAgain": {
+        "message": "Make google great again (keep original URL)"
+    },
+
+    "MakeImageSearchable": {
+        "message": "Make image searchable (via Right menu)"
+    },
+
+    "ImageReverseSearch" : {
+        "message": "Reverse Image Search"
+    },
+
+    "GoogleSearchLinkFix": {
+        "message": "Google Search Link Fix"
+    },
+
+    "KeepYoutubeWatchedTime": {
+        "message": "Keep Youtube's watched time (via Right menu)"
+    },
+
+    "YoutubeTimeMark": {
+        "message": "Stash with watched time"
     }
 }
